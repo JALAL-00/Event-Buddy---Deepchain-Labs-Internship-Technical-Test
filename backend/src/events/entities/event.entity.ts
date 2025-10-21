@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Booking } from '../../bookings/entities/booking.entity';
 
 @Entity('events')
 export class Event {
@@ -17,7 +19,7 @@ export class Event {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'timestamptz' }) 
+  @Column({ type: 'timestamptz' })
   date: Date;
 
   @Column({ type: 'varchar', length: 255 })
@@ -26,10 +28,10 @@ export class Event {
   @Column({ type: 'int' })
   capacity: number;
 
-  @Column({ type: 'text', array: true, default: [] }) 
+  @Column({ type: 'text', array: true, default: [] })
   tags: string[];
 
-  @Column({ type: 'varchar', nullable: true }) 
+  @Column({ type: 'varchar', nullable: true })
   imageUrl: string;
 
   @CreateDateColumn()
@@ -37,4 +39,8 @@ export class Event {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // --- RELATION TO BOOKINGS ---
+  @OneToMany(() => Booking, (booking) => booking.event)
+  bookings: Booking[];
 }

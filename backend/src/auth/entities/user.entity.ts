@@ -4,10 +4,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { UserRole } from '../../common/enums/user-role.enum';
+import { Booking } from '../../bookings/entities/booking.entity';
 
-@Entity('users') // This tells TypeORM to create a 'users' table for this entity
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -18,7 +20,7 @@ export class User {
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', select: false }) // `select: false` prevents password from being returned in queries by default
+  @Column({ type: 'varchar', select: false })
   password: string;
 
   @Column({
@@ -33,4 +35,8 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // --- RELATION TO BOOKINGS ---
+  @OneToMany(() => Booking, (booking) => booking.user)
+  bookings: Booking[];
 }
