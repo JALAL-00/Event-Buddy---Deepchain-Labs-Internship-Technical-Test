@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { SeedModule } from './seed/seed.module';
 import { EventsModule } from './events/events.module';
+import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { EventsModule } from './events/events.module';
     AuthModule,
     SeedModule,
     EventsModule,
+    BookingsModule,
 
   ],
   controllers: [AppController],

@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, LessThan, MoreThan } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class EventsService {
@@ -38,10 +39,61 @@ export class EventsService {
       throw new NotFoundException(`Event with ID "${id}" not found`);
     }
     return this.eventRepository.save(event);
+
   }
 
   async remove(id: string): Promise<void> {
     const event = await this.findOne(id);
     await this.eventRepository.remove(event);
+  }
+
+  async findUpcoming(paginationDto: PaginationDto) {
+    // Corrected: Provide default values during destructuring to ensure type safety.
+    const { page = 1, limit = 6 } = paginationDto;
+    const skip = (page - 1) * limit;
+
+    const [events, total] = await this.eventRepository.findAndCount({
+      where: {
+        date: MoreThan(new Date()),
+      },
+      order: {
+        date: 'ASC',
+      },
+      take: limit,
+      skip,
+    });
+
+    return {
+      data: events,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  async findPast(paginationDto: PaginationDto) {
+    // Corrected: Provide default values during destructuring.
+    const { page = 1, limit = 6 } = paginationDto;
+    const skip = (page - 1) * limit;
+
+    const [events, total] = await this.eventRepository.findAndCount({
+      where: {
+        date: LessThan(new Date()),
+      },
+      order: {
+        date: 'DESC',
+      },
+      take: limit,
+      skip,
+    });
+
+    return {
+      data: events,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 }
