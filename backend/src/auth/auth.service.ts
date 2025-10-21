@@ -24,13 +24,11 @@ export class AuthService {
   async register(createUserDto: CreateUserDto) {
     const { fullName, email, password } = createUserDto;
 
-    // Check for existing user
     const existingUser = await this.userRepository.findOne({ where: { email } });
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
     }
 
-    // Hash password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = this.userRepository.create({
@@ -41,7 +39,7 @@ export class AuthService {
 
     try {
       const savedUser = await this.userRepository.save(newUser);
-      delete (savedUser as any).password; // Prevent password from leaking in response
+      delete (savedUser as any).password; 
       return savedUser;
     } catch (error) {
       throw new InternalServerErrorException(
@@ -54,23 +52,20 @@ export class AuthService {
   async login(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
 
-    // Because password has `select: false` in the entity, we must explicitly include it
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['id', 'fullName', 'email', 'password', 'role'], // explicitly fetch password
+      select: ['id', 'fullName', 'email', 'password', 'role'], 
     });
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Compare hashed password
     const isPasswordMatching = await bcrypt.compare(password, user.password);
     if (!isPasswordMatching) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Create JWT payload
     const payload = {
       sub: user.id,
       email: user.email,

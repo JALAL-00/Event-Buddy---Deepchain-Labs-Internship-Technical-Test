@@ -48,7 +48,7 @@ export class EventsService {
   }
 
   async findUpcoming(paginationDto: PaginationDto) {
-    // Corrected: Provide default values during destructuring to ensure type safety.
+
     const { page = 1, limit = 6 } = paginationDto;
     const skip = (page - 1) * limit;
 
@@ -73,7 +73,7 @@ export class EventsService {
   }
 
   async findPast(paginationDto: PaginationDto) {
-    // Corrected: Provide default values during destructuring.
+    
     const { page = 1, limit = 6 } = paginationDto;
     const skip = (page - 1) * limit;
 

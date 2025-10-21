@@ -36,7 +36,6 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // --- RELATION TO BOOKINGS ---
   @OneToMany(() => Booking, (booking) => booking.user)
   bookings: Booking[];
 }

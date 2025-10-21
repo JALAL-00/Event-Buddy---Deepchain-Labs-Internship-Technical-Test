@@ -40,7 +40,6 @@ export class Event {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // --- RELATION TO BOOKINGS ---
   @OneToMany(() => Booking, (booking) => booking.event)
   bookings: Booking[];
 }

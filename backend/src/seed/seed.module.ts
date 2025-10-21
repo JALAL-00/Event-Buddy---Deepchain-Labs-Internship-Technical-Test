@@ -5,7 +5,7 @@ import { User } from '../auth/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), ConfigModule], // <-- Give it access to User repository and Config
+  imports: [TypeOrmModule.forFeature([User]), ConfigModule], 
   providers: [SeedService],
 })
 export class SeedModule {}

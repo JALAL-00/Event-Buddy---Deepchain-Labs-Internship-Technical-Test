@@ -20,8 +20,6 @@ export class Booking {
   @CreateDateColumn()
   createdAt: Date;
 
-  // --- RELATIONS ---
-  // A booking belongs to one user
   @ManyToOne(() => User, (user) => user.bookings, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
@@ -29,7 +27,6 @@ export class Booking {
   @Column()
   userId: string;
 
-  // A booking belongs to one event
   @ManyToOne(() => Event, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'eventId' })
   event: Event;

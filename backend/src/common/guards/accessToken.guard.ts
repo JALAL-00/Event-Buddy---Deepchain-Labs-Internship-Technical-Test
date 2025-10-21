@@ -10,17 +10,16 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
   }
 
   canActivate(context: ExecutionContext) {
-    // Check if the route is marked with the @Public decorator
+
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
     if (isPublic) {
-      return true; // If public, allow access immediately
+      return true; 
     }
 
-    // If not public, proceed with the default JWT authentication
     return super.canActivate(context);
   }
 }

@@ -7,8 +7,6 @@ export class UpdatePayloadDto {
   @IsUUID()
   id: string;
 
-  // This tells the validator to also validate the 'data' object
-  // against the rules in UpdateEventDto
   @ValidateNested()
   @Type(() => UpdateEventDto)
   data: UpdateEventDto;
