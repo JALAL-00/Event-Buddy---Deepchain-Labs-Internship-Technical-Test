@@ -3,6 +3,9 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from '../common/enums/user-role.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -26,4 +29,12 @@ export class AuthController {
   getProfile(@Req() req) {
     return req.user;
   }
+
+  @Get('admin-test')
+  @Roles(UserRole.ADMIN) 
+  @UseGuards(AuthGuard(), RolesGuard) 
+  @HttpCode(HttpStatus.OK)
+  adminTest() {
+  return { message: 'Welcome, Admin!' };
+}
 }
