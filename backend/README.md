@@ -1,99 +1,111 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Event Buddy - Backend API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is the backend for the Event Buddy application, a full-stack event booking platform. It is built with **NestJS**, **TypeScript**, and **PostgreSQL**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+-   **JWT Authentication:** Secure endpoints with role-based access control (Admin vs. User).
+-   **Admin Event Management:** Full CRUD (Create, Read, Update, Delete) functionality for events, including image uploads.
+-   **Public Event Listings:** Publicly accessible endpoints for upcoming and past events with pagination.
+-   **User Booking System:** Secure booking and cancellation system with robust validation (seat availability, event dates).
+-   **Dynamic Seat Calculation:** All event endpoints provide real-time `bookedSeats` and `spotsLeft` data.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## 🚀 Getting Started
 
+### Prerequisites
+
+-   [Node.js](https://nodejs.org/) (v18 or later recommended)
+-   [npm](https://www.npmjs.com/)
+-   [PostgreSQL](https://www.postgresql.org/download/) running locally
+-   [pgAdmin 4](https://www.pgadmin.org/download/) (Recommended for database management)
+
+### 1. Setup
+
+**Clone the repository:**
+_You would typically clone the main project here, but for now, you already have the folder._
+
+**Navigate to the backend directory:**
 ```bash
-$ npm install
+cd event-buddy/backend
 ```
 
-## Compile and run the project
-
+**Install dependencies:**
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 2. Environment Configuration
 
-```bash
-# unit tests
-$ npm run test
+The application uses a `.env` file for environment variables.
 
-# e2e tests
-$ npm run test:e2e
+1.  Create a file named `.env` in the root of the `/backend` directory.
+2.  Copy the contents of `.env.example` (or the content below) into it.
 
-# test coverage
-$ npm run test:cov
+```ini
+# .env file content
+
+# --- Database Configuration ---
+# Replace with your actual PostgreSQL credentials
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USERNAME=your_postgres_username
+DATABASE_PASSWORD=your_postgres_password
+DATABASE_NAME=eventbuddy
+
+# --- JWT Configuration ---
+# You can generate a strong secret here: https://www.grc.com/passwords.htm
+JWT_SECRET=a8b3c1d9e7f5a2b8d4e6f3a1c9d8b7c6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0
+JWT_EXPIRES_IN=1d
 ```
 
-## Deployment
+### 3. Database Setup
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+1.  Open **pgAdmin 4**.
+2.  Connect to your local PostgreSQL server.
+3.  Right-click on `Databases` -> `Create` -> `Database...`.
+4.  Enter `eventbuddy` as the Database name and click Save.
+5.  The application will automatically create the necessary tables when it first starts (`synchronize: true` is enabled for development).
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 4. Running the Application
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Development mode with hot-reload
+npm run start:dev
 ```
+The server will start on `http://localhost:3000`. The first time it runs, it will automatically seed the database with an Admin account.
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**Default Admin Credentials:**
+-   **Email:** `admin@eventbuddy.com`
+-   **Password:** `adminpassword`
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+##  API Endpoints
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+A brief overview of the available API routes. Use an API client like [Postman](https://www.postman.com/) for testing.
 
-## Support
+*(A more detailed Postman collection would be exported for a full project, but this list is sufficient for the assignment.)*
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### `Auth`
 
-## Stay in touch
+-   `POST /auth/register`: Register a new user.
+-   `POST /auth/login`: Log in a user or admin, returns a JWT `access_token`.
+-   `GET /auth/profile`: [USER] Get the profile of the logged-in user.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### `Events`
 
-## License
+-   `GET /events/upcoming`: [PUBLIC] Get a paginated list of upcoming events.
+-   `GET /events/past`: [PUBLIC] Get a paginated list of past events.
+-   `POST /events/public/find`: [PUBLIC] Get details of a single event by its ID.
+-   `GET /events`: [ADMIN] Get a list of all events with registration counts.
+-   `POST /events`: [ADMIN] Create a new event (requires `multipart/form-data` for image upload).
+-   `PATCH /events`: [ADMIN] Update an event.
+-   `DELETE /events`: [ADMIN] Delete an event.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-# Event-Buddy
+### `Bookings`
+
+-   `POST /bookings`: [USER] Book seats for an event.
+-   `GET /bookings/my-bookings`: [USER] Get a list of all bookings for the current user.
+-   `DELETE /bookings/cancel`: [USER] Cancel a specific booking.

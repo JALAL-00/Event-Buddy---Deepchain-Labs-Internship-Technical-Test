@@ -10,7 +10,13 @@ async function bootstrap() {
   const reflector = new Reflector();
 
   app.useGlobalGuards(new AccessTokenGuard(reflector));
-  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
@@ -26,4 +32,5 @@ async function bootstrap() {
   await app.listen(3000);
   console.log(`Backend is running on: ${await app.getUrl()}`);
 }
+
 bootstrap();
