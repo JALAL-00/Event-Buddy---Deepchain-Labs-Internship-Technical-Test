@@ -23,13 +23,12 @@ This is the backend for the Event Buddy application, a full-stack event booking 
 
 ### 1. Setup
 
-### 1. Setup
-
 **Clone the repository:**
 ```bash
 git clone https://github.com/JALAL-00/Event-Buddy---Deepchain-Labs-Internship-Technical-Test.git
+```
 
-**Navigate to the backend directory:**
+**Navigate to the backend project folder:**
 ```bash
 cd Event-Buddy---Deepchain-Labs-Internship-Technical-Test/backend
 ```
@@ -44,7 +43,7 @@ npm install
 The application uses a `.env` file for environment variables.
 
 1.  Create a file named `.env` in the root of the `/backend` directory.
-2.  Copy the contents of `.env.example` (or the content below) into it.
+2.  Copy the contents of `.env.example` (if present) or the content below into it.
 
 ```ini
 # .env file content
@@ -88,8 +87,6 @@ The server will start on `http://localhost:3000`. The first time it runs, it wil
 ##  API Endpoints
 
 A brief overview of the available API routes. Use an API client like [Postman](https://www.postman.com/) for testing.
-
-*(A more detailed Postman collection would be exported for a full project, but this list is sufficient for the assignment.)*
 
 ### `Auth`
 
