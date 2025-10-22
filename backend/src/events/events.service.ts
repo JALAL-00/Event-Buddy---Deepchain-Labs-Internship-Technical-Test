@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -17,21 +17,17 @@ export class EventsService {
   private getEventsBaseQuery() {
     return this.eventRepository
       .createQueryBuilder('event')
-      .leftJoin(
-        (subQuery) =>
-          subQuery
-            .select('booking."eventId", SUM(booking."numberOfSeats") as "totalBookedSeats"')
-            .from(Booking, 'booking')
-            .groupBy('booking."eventId"'),
-        'bookings',
-        'bookings."eventId" = event.id',
-      )
-      .addSelect('COALESCE(bookings."totalBookedSeats", 0)', 'bookedSeats');
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COALESCE(SUM(booking.numberOfSeats), 0)', 'bookedSeats')
+          .from(Booking, 'booking')
+          .where('booking.eventId = event.id');
+      }, 'bookedSeats');
   }
-
+  
   private mapEventResponse(event: any): any {
     const bookedSeats = parseInt(event.bookedSeats, 10) || 0;
-    const { bookedSeats: rawBooked, ...restOfEvent } = event;
+    const { bookings, ...restOfEvent } = event;
     return {
       ...restOfEvent,
       bookedSeats,
@@ -39,55 +35,92 @@ export class EventsService {
     };
   }
 
+  private combineDateAndTime(date: string, time: string): Date {
+    const startTime = time.split('-')[0].trim();
+    const [timePart, modifier] = startTime.split(' ');
+    let [hours, minutes] = timePart.split(':').map(Number);
+    
+    if (modifier === 'PM' && hours < 12) hours += 12;
+    if (modifier === 'AM' && hours === 12) hours = 0;
+
+    const eventDate = new Date(date);
+    eventDate.setHours(hours, minutes, 0, 0);
+
+    return eventDate;
+  }
+  
+  async create(createEventDto: CreateEventDto): Promise<Event> {
+    const { date, time, ...restDto } = createEventDto;
+    
+    if (!date || !time) {
+      throw new BadRequestException("Date and time are required.");
+    }
+
+    const eventDate = this.combineDateAndTime(date, time);
+
+    const newEvent = this.eventRepository.create({
+      ...restDto,
+      date: eventDate,
+    });
+    return this.eventRepository.save(newEvent);
+  }
+  
+  async update(id: string, updateEventDto: UpdateEventDto): Promise<Event> {
+    // We fetch the event first to ensure it exists.
+    const event = await this.eventRepository.findOneBy({id});
+    if (!event) {
+        throw new NotFoundException(`Event with ID "${id}" not found`);
+    }
+
+    // Update fields from the DTO. `preload` can be less predictable with relations.
+    Object.assign(event, updateEventDto);
+    
+    // Handle date/time update if both are provided
+    if (updateEventDto.date && updateEventDto.time) {
+      event.date = this.combineDateAndTime(updateEventDto.date, updateEventDto.time);
+    }
+    
+    return this.eventRepository.save(event);
+  }
+
+  // --- PAGINATED METHODS WITH FIXES ---
   async findUpcoming(paginationDto: PaginationDto) {
+    // FIX: Provide default values here to satisfy TypeScript
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 6;
     const skip = (page - 1) * limit;
 
-    const queryBuilder = this.getEventsBaseQuery()
+    const [events, total] = await this.getEventsBaseQuery()
       .where('event.date > :now', { now: new Date() })
       .orderBy('event.date', 'ASC')
       .skip(skip)
-      .take(limit);
+      .take(limit)
+      .getManyAndCount();
 
-    const { entities: events, raw } = await queryBuilder.getRawAndEntities();
-    const total = await queryBuilder.getCount();
-
-    const enrichedEntities = events.map((entity, index) => {
-        const raw = queryBuilder.getRawMany()[index];
-        return this.mapEventResponse({...entity, bookedSeats: raw?.bookedSeats ?? '0'});
-    })
-    
     return {
-      data: enrichedEntities,
+      data: events.map(event => this.mapEventResponse(event)),
       total,
       page,
       limit,
       totalPages: Math.ceil(total / limit),
     };
   }
-  
+
   async findPast(paginationDto: PaginationDto) {
+    // FIX: Provide default values here to satisfy TypeScript
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 6;
     const skip = (page - 1) * limit;
 
-    const queryBuilder = this.getEventsBaseQuery()
+    const [events, total] = await this.getEventsBaseQuery()
       .where('event.date < :now', { now: new Date() })
       .orderBy('event.date', 'DESC')
       .skip(skip)
-      .take(limit);
-
-    const { entities: events, raw } = await queryBuilder.getRawAndEntities();
-    const total = await queryBuilder.getCount();
-
-    const enrichedEntities = events.map((entity, index) => {
-        const raw = queryBuilder.getRawMany()[index];
-        return this.mapEventResponse({...entity, bookedSeats: raw?.bookedSeats ?? '0'});
-    })
+      .take(limit)
+      .getManyAndCount();
 
     return {
-      data: enrichedEntities,
+      data: events.map(event => this.mapEventResponse(event)),
       total,
       page,
       limit,
@@ -96,41 +129,21 @@ export class EventsService {
   }
   
   async findAll(): Promise<any[]> {
-    const queryBuilder = this.getEventsBaseQuery().orderBy('event.date', 'ASC');
-    const { entities, raw } = await queryBuilder.getRawAndEntities();
+    const events = await this.getEventsBaseQuery()
+        .orderBy('event.date', 'ASC')
+        .getMany();
+    return events.map(event => this.mapEventResponse(event));
 
-    return entities.map((entity, index) => {
-        return this.mapEventResponse({...entity, bookedSeats: raw[index]?.bookedSeats ?? '0'});
-    });
   }
-  
+
   async findOne(id: string): Promise<any> {
-    const queryBuilder = this.getEventsBaseQuery()
-        .where('event.id = :id', { id });
-    
-    const { entities, raw } = await queryBuilder.getRawAndEntities();
-
-    if (!entities.length) {
-      throw new NotFoundException(`Event with ID "${id}" not found`);
-    }
-
-    const entity = entities[0];
-    const rawData = raw[0];
-
-    return this.mapEventResponse({...entity, bookedSeats: rawData?.bookedSeats ?? '0'});
-  }
-
-  async create(createEventDto: CreateEventDto): Promise<Event> {
-    const newEvent = this.eventRepository.create(createEventDto);
-    return this.eventRepository.save(newEvent);
-  }
-
-  async update(id: string, updateEventDto: UpdateEventDto): Promise<Event> {
-    const event = await this.eventRepository.preload({ id, ...updateEventDto });
+    const event = await this.getEventsBaseQuery()
+      .where('event.id = :id', { id })
+      .getOne();
     if (!event) {
       throw new NotFoundException(`Event with ID "${id}" not found`);
     }
-    return this.eventRepository.save(event);
+    return this.mapEventResponse(event);
   }
 
   async remove(id: string): Promise<void> {

@@ -1,8 +1,7 @@
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
-  IsDateString,
   IsInt,
   Min,
   IsOptional,
@@ -18,9 +17,13 @@ export class CreateEventDto {
   @IsNotEmpty()
   description: string;
 
-  @IsDateString()
+  @IsString()
   @IsNotEmpty()
-  date: string;
+  date: string; 
+
+  @IsString()
+  @IsNotEmpty()
+  time: string; 
 
   @IsString()
   @IsNotEmpty()
@@ -32,6 +35,12 @@ export class CreateEventDto {
   capacity: number;
 
   @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'string' && value.trim() !== '') {
+      return value.split(',').map(tag => tag.trim());
+    }
+    return value;
+  })
   @IsArray()
   @IsString({ each: true })
   tags?: string[];
