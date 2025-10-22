@@ -95,10 +95,10 @@ To facilitate easy testing of all API endpoints, a pre-configured Postman collec
 1.  **Download the Collection:** Download the Postman collection JSON file from the following link:
     [**Event Buddy Postman Collection**](https://drive.google.com/drive/folders/1_j6q3yYxdvPbcTDGrRC-8WVg3JHRu9qI?usp=sharing)
 
-2.  **Import:** Open Postman and click the **Import** button. Select the downloaded JSON file to import the collection named `Event-Buddy`.
+2.  **Import:** Open Postman and click the **Import** button. Drag & Drop the file Don't need to change anything, everythig is managed propery(by folder) just open and Test Accordingly step-3 instructions.
 
-3.  **Workflow for Protected Routes:** Most routes require a JWT for authorization. Here is the manual workflow:
-    a. Run the **Login User** or **Login Admin** request first (found in the `Auth` folder).
+3.  **Workflow for Protected Routes:** Most routes require a JWT for    authorization. Here is the manual workflow:
+    a. First Run User registration Then Run the **Login User** or **Login Admin** request first (found in the `Auth` folder).
     b. Copy the `access_token` from the JSON response.
     c. For any protected request (e.g., `Create Event`), go to the **Authorization** tab.
     d. Select **Type: Bearer Token** and paste the copied token into the "Token" field on the right.
