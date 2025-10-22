@@ -23,12 +23,15 @@ This is the backend for the Event Buddy application, a full-stack event booking 
 
 ### 1. Setup
 
+### 1. Setup
+
 **Clone the repository:**
-_You would typically clone the main project here, but for now, you already have the folder._
+```bash
+git clone https://github.com/JALAL-00/Event-Buddy---Deepchain-Labs-Internship-Technical-Test.git
 
 **Navigate to the backend directory:**
 ```bash
-cd event-buddy/backend
+cd Event-Buddy---Deepchain-Labs-Internship-Technical-Test/backend
 ```
 
 **Install dependencies:**
