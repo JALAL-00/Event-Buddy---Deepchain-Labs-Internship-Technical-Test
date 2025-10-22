@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 // @ts-ignore: Allow side-effect global CSS import without type declarations
 import './globals.css';
-import { JSX } from 'react'; // <-- Import JSX type for better practice
+import { JSX } from 'react';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +19,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-light-violet`}>
-
+        {/* This is the crucial part that was missing. It tells Next.js where to render the page content. */}
+        {children}
       </body>
     </html>
   );
