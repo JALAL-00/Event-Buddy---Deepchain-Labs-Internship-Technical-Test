@@ -5,6 +5,7 @@ This is the backend for the Event Buddy application, a full-stack event booking 
 ## Features
 
 -   **JWT Authentication:** Secure endpoints with role-based access control (Admin vs. User).
+-   **Strong Validation:** Enforces `@gmail.com` emails and strong passwords (uppercase, lowercase, number, special character, 8+ length).
 -   **Admin Event Management:** Full CRUD (Create, Read, Update, Delete) functionality for events, including image uploads.
 -   **Public Event Listings:** Publicly accessible endpoints for upcoming and past events with pagination.
 -   **User Booking System:** Secure booking and cancellation system with robust validation (seat availability, event dates).
@@ -49,6 +50,7 @@ The application uses a `.env` file for environment variables.
 # .env file content
 
 # --- Database Configuration ---
+# Replace with your actual PostgreSQL credentials
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
 DATABASE_USERNAME=your_postgres_username
@@ -56,7 +58,7 @@ DATABASE_PASSWORD=your_postgres_password
 DATABASE_NAME=eventbuddy
 
 # --- JWT Configuration ---
-# You can generate a strong secret here: https://www.grc.com/passwords.htm | Current string is enough
+# Don't need to change the String | If You can generate a strong secret here: https://www.grc.com/passwords.htm
 JWT_SECRET=a8b3c1d9e7f5a2b8d4e6f3a1c9d8b7c6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0
 JWT_EXPIRES_IN=1d
 ```
@@ -65,9 +67,10 @@ JWT_EXPIRES_IN=1d
 
 1.  Open **pgAdmin 4**.
 2.  Connect to your local PostgreSQL server.
-3.  Right-click on `Databases` -> `Create` -> `Database...`.
-4.  Enter `eventbuddy` as the Database name and click Save.
-5.  The application will automatically create the necessary tables when it first starts (`synchronize: true` is enabled for development).
+3.  **Drop** any existing `eventbuddy` database.
+4.  Right-click on `Databases` -> `Create` -> `Database...`.
+5.  Enter `eventbuddy` as the Database name and click Save.
+6.  The application will automatically create the necessary tables when it first starts (`synchronize: true` is enabled for development).
 
 ### 4. Running the Application
 
@@ -78,14 +81,33 @@ npm run start:dev
 The server will start on `http://localhost:3000`. The first time it runs, it will automatically seed the database with an Admin account.
 
 **Default Admin Credentials:**
--   **Email:** `admin@eventbuddy.com`
--   **Password:** `adminpassword`
+-   **Email:** `admin.jalal@gmail.com`
+-   **Password:** `AdminJalal123@`
+
+_Note: To change the default admin credentials, edit the variables in `backend/src/seed/seed.service.ts` and reset the database._
+
+---
+
+## 🧪 API Testing with Postman
+
+To facilitate easy testing of all API endpoints, a pre-configured Postman collection is provided. This collection includes requests for all major features.
+
+1.  **Download the Collection:** Download the Postman collection JSON file from the following link:
+    [**Event Buddy Postman Collection**](https://drive.google.com/drive/folders/1_j6q3yYxdvPbcTDGrRC-8WVg3JHRu9qI?usp=sharing)
+
+2.  **Import:** Open Postman and click the **Import** button. Select the downloaded JSON file to import the collection named `Event-Buddy`.
+
+3.  **Workflow for Protected Routes:** Most routes require a JWT for authorization. Here is the manual workflow:
+    a. Run the **Login User** or **Login Admin** request first (found in the `Auth` folder).
+    b. Copy the `access_token` from the JSON response.
+    c. For any protected request (e.g., `Create Event`), go to the **Authorization** tab.
+    d. Select **Type: Bearer Token** and paste the copied token into the "Token" field on the right.
 
 ---
 
 ##  API Endpoints
 
-A brief overview of the available API routes. Use an API client like [Postman](https://www.postman.com/) for testing.
+A brief overview of the available API routes, all of which are pre-configured in the provided Postman collection.
 
 ### `Auth`
 

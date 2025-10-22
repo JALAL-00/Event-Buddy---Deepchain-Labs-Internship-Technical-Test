@@ -2,24 +2,23 @@ import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Get, Req } fro
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { AuthGuard } from '@nestjs/passport'; 
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
-import { Public } from '../common/decorators/public.decorator'; 
+import { Public } from '../common/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Public() 
+  @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   register(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);
   }
 
-  @Public() 
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   login(@Body() loginUserDto: LoginUserDto) {
@@ -33,8 +32,8 @@ export class AuthController {
   }
 
   @Get('admin-test')
-  @Roles(UserRole.ADMIN) 
-  @UseGuards(RolesGuard) 
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   @HttpCode(HttpStatus.OK)
   adminTest() {
     return { message: 'Welcome, Admin!' };
