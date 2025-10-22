@@ -49,7 +49,6 @@ The application uses a `.env` file for environment variables.
 # .env file content
 
 # --- Database Configuration ---
-# Replace with your actual PostgreSQL credentials
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
 DATABASE_USERNAME=your_postgres_username
@@ -57,7 +56,7 @@ DATABASE_PASSWORD=your_postgres_password
 DATABASE_NAME=eventbuddy
 
 # --- JWT Configuration ---
-# You can generate a strong secret here: https://www.grc.com/passwords.htm
+# You can generate a strong secret here: https://www.grc.com/passwords.htm | Current string is enough
 JWT_SECRET=a8b3c1d9e7f5a2b8d4e6f3a1c9d8b7c6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0
 JWT_EXPIRES_IN=1d
 ```
