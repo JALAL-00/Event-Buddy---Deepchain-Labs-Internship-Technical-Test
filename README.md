@@ -151,15 +151,3 @@ To test as a regular user, you must first register a new account.
 
 After registering, the application will automatically log you in and redirect you to the user dashboard. You can then log out and log back in using this email and password.
 
-### Testing the API Directly with cURL (Optional)
-For backend developers, the API can also be tested directly.
-
-#### User Registration
-```bash
-curl -X POST http://localhost:3000/auth/register \
--H "Content-Type: application/json" \
--d '{
-  "fullName": "Jalal Uddin",
-  "email": "jalaluddin0046@gmail.com",
-  "password": "ValidPassword123@"
-}'
