@@ -66,12 +66,12 @@ Follow these instructions to get the frontend development environment set up and
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/YOUR_USERNAME/event-buddy.git
+    git clone https://github.com/JALAL-00/Event-Buddy---Deepchain-Labs-Internship-Technical-Test.git
     ```
 
 2.  **Navigate to the frontend directory:**
     ```bash
-    cd event-buddy/frontend
+    cd cd Event-Buddy---Deepchain-Labs-Internship-Technical-Test/frontend
     ```
 
 3.  **Install dependencies:**
@@ -109,3 +109,20 @@ Follow these instructions to get the frontend development environment set up and
 ## Project Structure
 
 The project follows a standard Next.js App Router structure, organized for clarity and scalability.
+
+/src
+├── /app/ # Main routing, layouts, and pages
+│ ├── /(auth)/ # Route group for auth pages (login, register)
+│ ├── /(dashboard)/ # Route group for protected dashboards
+│ ├── /events/[id]/ # Dynamic route for event details
+│ ├── layout.tsx # Root layout
+│ └── page.tsx # Homepage
+│
+├── /components/ # Reusable React components
+│ ├── /shared/ # App-specific components (Navbar, EventCard, etc.)
+│ └── /ui/ # Generic UI components (Modal, Pagination)
+│
+├── /context/ # Global state management (AuthContext)
+├── /hooks/ # Custom React hooks (useAuth)
+├── /lib/ # Core utilities & libraries (axios configuration)
+└── /types/ # TypeScript type definitions and interfaces
