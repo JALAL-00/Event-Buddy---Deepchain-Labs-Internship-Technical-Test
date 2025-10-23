@@ -1,28 +1,24 @@
 // frontend/src/app/(auth)/register/page.tsx
 
-'use client'; // This is an interactive form, so it must be a Client Component.
+'use client'; 
 
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function RegisterPage() {
-  const { register } = useAuth(); // Get the register function from our AuthContext.
+  const { register } = useAuth(); 
   
-  // State for form inputs
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
-  // State for handling submission status and errors
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent) => {
-    // Prevent the form's default reload behavior
     event.preventDefault(); 
     
-    // Basic validation
     if (!fullName || !email || !password) {
       setError("All fields are required.");
       return;
@@ -32,15 +28,14 @@ export default function RegisterPage() {
     setError(null);
     
     try {
-      // Call the register function from the context
-      await register({ fullName, email, password });
-      // The context handles login and redirection on success
+      
+      await register({ fullName, email, password });      
     } catch (err: any) {
-      // If the context's register function throws an error, we catch it
+      
       const errorMessage = err.response?.data?.message || 'Registration failed. This email may already be in use.';
       setError(errorMessage);
     } finally {
-      // Ensure the loading state is turned off
+      
       setIsLoading(false);
     }
   };

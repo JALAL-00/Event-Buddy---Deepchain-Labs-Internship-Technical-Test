@@ -26,7 +26,6 @@ export default function AdminDashboardPage() {
     const handleOpenEditModal = (event: IEvent) => { setFormMode('edit'); setSelectedEvent(event); setIsModalOpen(true); };
     const handleCloseModal = () => { setIsModalOpen(false); setSelectedEvent(undefined); };
 
-    // FIX: The handleFormSubmit function is now corrected
     const handleFormSubmit = async (formData: FormData) => {
         setIsSubmitting(true);
         try {
@@ -38,7 +37,7 @@ export default function AdminDashboardPage() {
                 if (!selectedEvent?.id) {
                     throw new Error("No event selected for editing.");
                 }
-                // Call the corrected PATCH endpoint with the ID in the URL
+                
                 await api.patch(`/events/${selectedEvent.id}`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });

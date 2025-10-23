@@ -34,12 +34,10 @@ const EventCard = ({ event }: EventCardProps) => {
             layout="fill"
             objectFit="cover"
             onLoadingComplete={(image) => image.classList.remove("opacity-0")}
-            // --- FIX: Combined duplicate className attributes into one. ---
             className="transition-opacity duration-300 opacity-0"
           />
         </div>
 
-        {/* Event Content */}
         <div className="p-5 flex flex-col flex-grow">
           <div className="flex items-start gap-4">
             {/* Date Section */}

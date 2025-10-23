@@ -9,10 +9,8 @@ import Footer from '@/components/shared/Footer';
 import DashboardNavbar from '@/components/shared/DashboardNavbar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  // --- THIS IS THE CORRECTED LINE ---
-  // It correctly uses '=' to destructure the values from the useAuth() hook call.
+
   const { isAuthenticated, isLoading, user } = useAuth();
-  // --- END OF CORRECTION ---
   
   const router = useRouter();
 

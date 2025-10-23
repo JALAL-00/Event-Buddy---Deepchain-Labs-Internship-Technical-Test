@@ -16,7 +16,6 @@ import EventDetailSkeleton from '@/components/shared/EventDetailSkeleton';
 export default function EventDetailPage() {
   const { id: eventId } = useParams();
   const router = useRouter();
-  // We need the full user object to check their role
   const { isAuthenticated, user } = useAuth();
   
   const [event, setEvent] = useState<IEvent | null>(null);
@@ -131,8 +130,6 @@ export default function EventDetailPage() {
               </div>
           </div>
           
-           {/* --- FIX: Updated Booking Section Logic --- */}
-           {/* Case 1: The user is NOT an admin (or not logged in) AND the event is bookable */}
           {(user?.role !== 'ADMIN') && !isEventPast && event.spotsLeft > 0 && (
             <div className="p-8 bg-white rounded-lg shadow-sm border border-light-gray">
                 <h3 className="font-bold text-xl text-center text-dark-gray">Select Number of Seats</h3>
@@ -153,13 +150,11 @@ export default function EventDetailPage() {
             </div>
           )}
 
-           {/* Case 2: The user IS an admin and the event is not past */}
            {user?.role === 'ADMIN' && !isEventPast && (
             <div className="p-4 text-center bg-indigo-100 text-primary-blue rounded-lg font-semibold">
                 This is an Admin view. Admin not allow for Booking.
             </div>
            )}
-           {/* --- END OF FIX --- */}
            
           {isEventPast && <div className="p-4 bg-gray-100 text-center text-medium-gray rounded-lg">This event has already passed.</div>}
           {event.spotsLeft === 0 && !isEventPast && <div className="p-4 bg-red-100 text-center text-danger-red rounded-lg">This event is fully booked.</div>}

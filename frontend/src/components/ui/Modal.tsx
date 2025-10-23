@@ -35,8 +35,6 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
   if (!isOpen) return null;
 
   return createPortal(
-    // --- STYLING CORRECTIONS ---
-    // 1. Overlay is now items-center for vertical centering. p-4 provides space from screen edges.
     <div
       className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"
       role="dialog"
@@ -44,8 +42,6 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
     >
       <div
         ref={modalRef}
-        // 2. max-h-[90vh] ensures the modal never exceeds 90% of the viewport height.
-        //    flex-col and overflow-hidden are for managing internal layout.
         className="bg-white rounded-lg shadow-xl w-full max-w-2xl flex flex-col max-h-[90vh] transform transition-all"
       >
         {/* Modal Header */}
@@ -64,8 +60,6 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
             </svg>
           </button>
         </div>
-        {/* Modal Content */}
-        {/* 3. overflow-y-auto makes the CONTENT area scrollable, not the whole page. */}
         <div className="p-4 md:p-5 overflow-y-auto">
           {children}
         </div>

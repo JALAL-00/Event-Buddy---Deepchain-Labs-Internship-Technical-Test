@@ -1,1 +1,177 @@
-# Event-Buddy
+# Event Buddy - Full Stack Event Booking System
+
+Event Buddy is a full-stack, simplified version of an event booking platform where users can browse upcoming events and book their seats. It features a complete authentication system with distinct roles for regular users and administrators, a responsive frontend built with Next.js, and a robust RESTful API powered by NestJS.
+
+This project was built as a technical test, fulfilling all specified requirements for both frontend and backend development.
+
+![Event Buddy Homepage Screenshot](https://raw.githubusercontent.com/JALAL-00/Event-Buddy---Deepchain-Labs-Internship-Technical-Test/main/event-buddy-screenshot.png)
+*(Screenshot of the application homepage)*
+
+---
+
+## Key Features
+
+The application is divided into three core functional areas:
+
+### 👤 **User Functionality**
+- **Event Discovery:** Browse paginated lists of upcoming and past events.
+- **Detailed View:** See full event details, including description, date, location, and real-time remaining spots.
+- **Secure Authentication:** Seamless user registration and JWT-based login.
+- **Seat Booking:** Authenticated users can book between 1 to 4 seats for any upcoming event.
+- **Personal Dashboard:** View and manage all registered events, with the ability to cancel bookings.
+
+### ⚙️ **Admin Functionality**
+- **Protected Dashboard:** Role-based access ensures only administrators can access the event management panel.
+- **Full CRUD Operations:**
+  - **Create:** Add new events through a rich form with image upload capabilities.
+  - **Read:** View a comprehensive list of all events and their live registration status.
+  - **Update:** Edit any detail of an existing event.
+  - **Delete:** Remove events from the platform.
+- **System Monitoring:** At-a-glance view of event registrations to monitor performance.
+
+---
+
+## Technology Stack
+
+This project is a modern full-stack monorepo with a clear separation between the client and server applications.
+
+### 🖥️ Frontend
+- **Framework:** **Next.js** (App Router)
+- **Language:** **TypeScript**
+- **Styling:** **Tailwind CSS**
+- **API Communication:** **Axios**
+- **State Management:** **React Context API**
+
+### 🗄️ Backend
+- **Framework:** **NestJS**
+- **Language:** **TypeScript**
+- **Database:** **PostgreSQL** with **TypeORM**
+- **Authentication:** **JWT** with **Passport.js**
+
+---
+
+## Getting Started & How to Run
+
+To run the full application locally, you will need to set up and run both the backend and the frontend. **The backend server must be running before you start the frontend.**
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18.x or later)
+- [npm](https://www.npmjs.com/)
+- [PostgreSQL](https://www.postgresql.org/) database server installed and running.
+- [Git](https://git-scm.com/)
+
+### 🚀 Step 1: Run the Backend Server
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/JALAL-00/Event-Buddy---Deepchain-Labs-Internship-Technical-Test.git
+    cd Event-Buddy---Deepchain-Labs-Internship-Technical-Test
+    ```
+
+2.  **Navigate to the Backend Directory:**
+    ```bash
+    cd backend
+    ```
+
+3.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+
+4.  **Set Up Environment Variables:**
+    Create a `.env` file in the `/backend` directory with the following content. **Make sure to update these values to match your local PostgreSQL configuration.**
+    ```plaintext
+    # backend/.env
+
+    DATABASE_HOST=localhost
+    DATABASE_PORT=5432
+    DATABASE_USERNAME=postgres
+    DATABASE_PASSWORD=your_postgres_password_here
+    DATABASE_NAME=eventbuddy
+
+    JWT_SECRET=a8b3c1d9e7f5a2b8d4e6f3a1c9d8b7c6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0
+    JWT_EXPIRES_IN=1d
+    ```
+
+5.  **Run the Backend:**
+    The server will start, connect to the database, and automatically seed the admin user.
+    ```bash
+    npm run start:dev
+    ```
+    The backend API will now be running at `http://localhost:3000`.
+
+### 🖥️ Step 2: Run the Frontend Application
+
+1.  **Open a New Terminal** in the root project directory.
+
+2.  **Navigate to the Frontend Directory:**
+    ```bash
+    cd frontend
+    ```
+
+3.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+
+4.  **Set Up Environment Variables:**
+    Create a `.env.local` file in the `/frontend` directory. **This step is mandatory.**
+    ```plaintext
+    # frontend/.env.local
+
+    NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+    ```
+
+5.  **Run the Frontend:**
+    ```bash
+    npm run dev
+    ```
+    The application will be available at `http://localhost:3001`.
+
+---
+
+## Admin Credentials & API Examples
+
+You can interact with the platform through the UI or test the API directly.
+
+### Admin Access
+The backend automatically creates an admin user on its first run.
+
+- **Email:** `admin.jalal@gmail.com`
+- **Password:** `AdminJalal123@`
+
+### API Usage Examples (`cURL`)
+
+#### User Registration
+```bash
+curl -X POST http://localhost:3000/auth/register \
+-H "Content-Type: application/json" \
+-d '{
+  "fullName": "Jalal Uddin",
+  "email": "jalaluddin0046@gmail.com",
+  "password": "ValidPassword123@"
+}'
+
+#### User Login
+```bash
+curl -X POST http://localhost:3000/auth/login \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "jalaluddin0046@gmail.com",
+  "password": "ValidPassword123@"
+}'
+
+#### Admin Login
+```bash
+curl -X POST http://localhost:3000/auth/login \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "admin.jalal@gmail.com",
+    "password": "AdminJalal123@"
+}'
+
+### Further Information
+For more specific details about the implementation of each part of the application, please see the individual README files within this repository:
+
+Backend README
+Frontend README

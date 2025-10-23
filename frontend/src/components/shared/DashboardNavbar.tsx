@@ -13,18 +13,14 @@ type DashboardNavbarProps = {
 const DashboardNavbar = ({ user }: DashboardNavbarProps) => {
   const { logout } = useAuth();
   
-  // Guard clause for the rare case user is null
   if (!user) return null;
   
   const dashboardHref = user.role === 'ADMIN' ? '/admin/dashboard' : '/user/dashboard';
 
-  // --- THIS IS THE CORRECTED LOGIC ---
-  // We now check the user's role to determine the correct greeting.
   const displayName =
     user.role === 'ADMIN'
-      ? 'Admin' // If role is ADMIN, display "Admin"
-      : user.fullName?.split(' ')[0] || 'User'; // Otherwise, display the first name or "User"
-  // --- END OF CORRECTION ---
+      ? 'Admin' 
+      : user.fullName?.split(' ')[0] || 'User'; 
 
   return (
     <header className="bg-light-violet/80 backdrop-blur-sm sticky top-0 z-50 border-b border-light-gray">
@@ -38,7 +34,7 @@ const DashboardNavbar = ({ user }: DashboardNavbarProps) => {
           </div>
           <div className="flex items-center space-x-4">
               <Link href={dashboardHref} className="font-semibold text-dark-gray hover:text-primary-blue transition-colors">
-                  Hello, {displayName} {/* Using the safe, role-aware variable */}
+                  Hello, {displayName} 
               </Link>
               <button 
                   onClick={logout}

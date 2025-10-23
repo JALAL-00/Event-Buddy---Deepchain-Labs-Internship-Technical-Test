@@ -9,7 +9,7 @@ type EventFormData = Omit<IEvent, 'id' | 'createdAt' | 'updatedAt' | 'bookedSeat
     date: string;
     time: string;
     image: File | null;
-    tags: string; // The form state uses a comma-separated string for tags
+    tags: string; 
 };
 
 type EventFormProps = {
@@ -33,7 +33,6 @@ const EventForm = ({ mode, initialData, onSubmit, onCancel, isLoading }: EventFo
             const dateStr = eventDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
             const timeStr = eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
-            // FIX: Explicitly map properties to avoid TypeScript type conflicts.
             setFormData({
                 title: initialData.title,
                 description: initialData.description,
@@ -79,10 +78,6 @@ const EventForm = ({ mode, initialData, onSubmit, onCancel, isLoading }: EventFo
         data.append('location', formData.location);
         data.append('capacity', String(formData.capacity));
         data.append('tags', formData.tags);
-
-        // FIX: Remove 'id' from FormData to prevent validation errors on the backend.
-        // The ID will be passed via URL parameter instead.
-        // if (mode === 'edit' && initialData) { data.append('id', initialData.id); }
 
         if (formData.image) { data.append('image', formData.image); }
         onSubmit(data);

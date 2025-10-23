@@ -1,39 +1,34 @@
 // frontend/src/app/(auth)/login/page.tsx
 
-'use client'; // This is an interactive form, so it must be a Client Component.
+'use client'; 
 
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function LoginPage() {
-  const { login } = useAuth(); // Get the login function from our AuthContext.
+  const { login } = useAuth(); 
   
-  // State for form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
-  // State for handling submission status and errors
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent) => {
-    // Prevent the form's default reload behavior
+    
     event.preventDefault(); 
     
     setIsLoading(true);
     setError(null);
     
     try {
-      // Call the login function from the context
+      
       await login({ email, password });
-      // The context handles redirection on success, so we don't need to do it here.
     } catch (err: any) {
-      // If the context's login function throws an error, we catch it here.
       const errorMessage = err.response?.data?.message || 'Login failed. Please check your credentials and try again.';
       setError(errorMessage);
     } finally {
-      // Ensure the loading state is turned off, whether success or failure
       setIsLoading(false);
     }
   };

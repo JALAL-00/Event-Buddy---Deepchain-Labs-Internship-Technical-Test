@@ -4,7 +4,6 @@ import React from 'react';
 
 const EventCardSkeleton = () => {
   return (
-    // The container mimics the structure of the real EventCard article
     <div className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col">
       {/* Image Skeleton */}
       <div className="relative h-48 w-full bg-gray-200 animate-pulse"></div>

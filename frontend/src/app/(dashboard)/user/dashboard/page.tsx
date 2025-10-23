@@ -14,7 +14,6 @@ export default function UserDashboardPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Helper to format date for the list items
     const formatDate = (isoDate: string) => {
         const date = new Date(isoDate);
         return {
@@ -39,21 +38,20 @@ export default function UserDashboardPage() {
             }
         };
 
-        // Only fetch if the user object is available
         if (user) {
             fetchBookings();
         }
     }, [user]);
 
     const handleCancelBooking = async (bookingId: string) => {
-        // Confirmation dialog
+        
         if (!window.confirm('Are you sure you want to cancel this registration?')) {
             return;
         }
 
         try {
-            await api.delete('/bookings/cancel', { data: { bookingId } }); // DELETE with body
-            // On success, filter out the cancelled booking from the state
+            await api.delete('/bookings/cancel', { data: { bookingId } }); 
+            
             setBookings(prevBookings => prevBookings.filter(b => b.id !== bookingId));
         } catch (err: any) {
             alert(err.response?.data?.message || 'Failed to cancel booking.');
@@ -62,7 +60,6 @@ export default function UserDashboardPage() {
     
     const renderContent = () => {
         if (isLoading) {
-            // Skeleton loader for bookings
             return (
                 <div className="space-y-4 animate-pulse">
                     {[1, 2].map(i => (

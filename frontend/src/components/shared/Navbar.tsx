@@ -23,7 +23,6 @@ const Navbar = () => {
     if (isAuthenticated && user) {
       const dashboardHref = user.role === 'ADMIN' ? '/admin/dashboard' : '/user/dashboard';
       
-      // FIX: Added role-based logic for displayName
       const displayName =
         user.role === 'ADMIN'
           ? 'Admin'
