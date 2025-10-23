@@ -39,29 +39,20 @@ cd Event-Buddy---Deepchain-Labs-Internship-Technical-Test/backend
 npm install
 ```
 
-### 2. Environment Configuration
+### 2. **Set Up Environment Variables:**
+    Create a `.env` file in the `/backend` directory with the following content. **Make sure to update these values to match your local PostgreSQL configuration.**
+    ```plaintext
+    # backend/.env
 
-The application uses a `.env` file for environment variables.
+    DATABASE_HOST=localhost
+    DATABASE_PORT=5432
+    DATABASE_USERNAME=postgres
+    DATABASE_PASSWORD=your_postgres_password_here
+    DATABASE_NAME=eventbuddy
 
-1.  Create a file named `.env` in the root of the `/backend` directory.
-2.  Copy the contents of `.env.example` (if present) or the content below into it.
-
-```ini
-# .env file content
-
-# --- Database Configuration ---
-# Replace with your actual PostgreSQL credentials
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_USERNAME=your_postgres_username
-DATABASE_PASSWORD=your_postgres_password
-DATABASE_NAME=eventbuddy
-
-# --- JWT Configuration ---
-# Don't need to change the String | If You can generate a strong secret here: https://www.grc.com/passwords.htm
-JWT_SECRET=a8b3c1d9e7f5a2b8d4e6f3a1c9d8b7c6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0
-JWT_EXPIRES_IN=1d
-```
+    JWT_SECRET=a8b3c1d9e7f5a2b8d4e6f3a1c9d8b7c6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0
+    JWT_EXPIRES_IN=1d
+    ```
 
 ### 3. Database Setup
 
