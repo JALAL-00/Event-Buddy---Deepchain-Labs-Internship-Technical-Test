@@ -46,7 +46,7 @@ const Navbar = () => {
     return (
       <div className="flex items-center space-x-2">
         <Link href="/login">
-          <span className="px-4 py-2 text-sm font-semibold text-primary-blue border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+          <span className="px-4 py-2 text-sm font-semibold text-white bg-primary-blue rounded-lg shadow-sm hover:bg-indigo-600 transition-colors">
             Sign in
           </span>
         </Link>
