@@ -4,9 +4,6 @@ Event Buddy is a full-stack, simplified version of an event booking platform whe
 
 This project was built as a technical test, fulfilling all specified requirements for both frontend and backend development.
 
-![Event Buddy Homepage Screenshot](https://raw.githubusercontent.com/JALAL-00/Event-Buddy---Deepchain-Labs-Internship-Technical-Test/main/event-buddy-screenshot.png)
-*(Screenshot of the application homepage)*
-
 ---
 
 ## Key Features
@@ -140,14 +137,20 @@ The backend automatically creates an admin user on its first run. Go to the logi
 - **Email:** `admin.jalal@gmail.com`
 - **Password:** `AdminJalal123@`
 
+_Note: To change the default admin credentials, edit the variables in `backend/src/seed/seed.service.ts` and reset the database._
+
 ### Regular User Account (Manual Registration)
 To test as a regular user, you must first register a new account.
 
-**1. Go to the Sign Up page:** `http://localhost:3001/register`
-**2. Enter the following details:**
+**1. Enter the following details:**
 - **Full Name:** `Jalal Uddin`
 - **Email:** `jalaluddin0046@gmail.com`
 - **Password:** `ValidPassword123@`
 
 After registering, the application will automatically log you in and redirect you to the user dashboard. You can then log out and log back in using this email and password.
 
+### Regular User Account (Manual Login)
+
+**1. Enter the following details:**
+- **Email:** `jalaluddin0046@gmail.com`
+- **Password:** `ValidPassword123@`
