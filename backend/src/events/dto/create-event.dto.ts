@@ -1,3 +1,5 @@
+// backend/src/events/dto/create-event.dto.ts
+
 import { Type, Transform } from 'class-transformer';
 import {
   IsString,
@@ -19,11 +21,11 @@ export class CreateEventDto {
 
   @IsString()
   @IsNotEmpty()
-  date: string; 
+  date: string;
 
   @IsString()
   @IsNotEmpty()
-  time: string; 
+  time: string;
 
   @IsString()
   @IsNotEmpty()
@@ -35,15 +37,16 @@ export class CreateEventDto {
   capacity: number;
 
   @IsOptional()
+  // This @Transform decorator will be kept as a best-effort for non-form-data requests
   @Transform(({ value }) => {
     if (typeof value === 'string' && value.trim() !== '') {
       return value.split(',').map(tag => tag.trim());
     }
     return value;
   })
-  @IsArray()
-  @IsString({ each: true })
-  tags?: string[];
+  // We remove @IsArray and @IsString({ each: true }) to allow the service to handle the type logic robustly.
+  // The type is now explicitly allowed to be a string or string array.
+  tags?: string | string[];
 
   @IsOptional()
   @IsString()

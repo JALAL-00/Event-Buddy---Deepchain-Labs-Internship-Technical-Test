@@ -1,15 +1,11 @@
-// frontend/src/components/shared/EventCard.tsx
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { IEvent } from '@/types';
 
-// Define the props for the EventCard component
 type EventCardProps = {
   event: IEvent;
 };
 
-// A helper function to format dates, which we'll need a few times
 const formatDate = (isoDate: string) => {
   const date = new Date(isoDate);
   const options: Intl.DateTimeFormatOptions = { weekday: 'long' };
@@ -25,10 +21,9 @@ const EventCard = ({ event }: EventCardProps) => {
   const formattedDate = formatDate(event.date);
   const imageUrl = event.imageUrl
     ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${event.imageUrl}`
-    : '/images/event-placeholder.png'; // A fallback image
+    : '/images/event-placeholder.png'; 
 
   return (
-    // The entire card is a link to the event's detail page
     <Link href={`/events/${event.id}`} className="block group">
       <article className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col transition-transform transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
         {/* Event Image */}
@@ -38,10 +33,9 @@ const EventCard = ({ event }: EventCardProps) => {
             alt={event.title}
             layout="fill"
             objectFit="cover"
-            className="transition-opacity duration-300"
-            // You can add an effect like this for a loading placeholder
             onLoadingComplete={(image) => image.classList.remove("opacity-0")}
-            className="opacity-0"
+            // --- FIX: Combined duplicate className attributes into one. ---
+            className="transition-opacity duration-300 opacity-0"
           />
         </div>
 
@@ -58,7 +52,7 @@ const EventCard = ({ event }: EventCardProps) => {
             <div>
               <h3 className="font-bold text-lg text-dark-gray line-clamp-1">{event.title}</h3>
               <p className="text-medium-gray text-sm mt-1 line-clamp-2">
-                We&apos;ll get you directly seated and inside for you to enjoy the conference.
+                We'll get you directly seated and inside for you to enjoy the conference.
               </p>
             </div>
           </div>
@@ -81,14 +75,13 @@ const EventCard = ({ event }: EventCardProps) => {
 
           {/* Tags */}
           <div className="mt-4 flex flex-wrap gap-2">
-            {event.tags.slice(0, 3).map((tag) => (
+            {event.tags.map((tag) => (
               <span key={tag} className="px-2.5 py-1 text-xs font-semibold text-primary-blue bg-indigo-100 rounded-full">
                 {tag}
               </span>
             ))}
           </div>
 
-          {/* This spacer makes the footer stick to the bottom */}
           <div className="flex-grow"></div>
 
           {/* Card Footer */}
