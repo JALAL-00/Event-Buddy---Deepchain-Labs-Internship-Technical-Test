@@ -39,9 +39,10 @@ cd Event-Buddy---Deepchain-Labs-Internship-Technical-Test/backend
 npm install
 ```
 
-### 2. **Set Up Environment Variables:**
+### 2. Set Up Environment
+**Set Up Environment Variables:**
     Create a `.env` file in the `/backend` directory with the following content. **Make sure to update these values to match your local PostgreSQL configuration.**
-    ```plaintext
+    
     # backend/.env
 
     DATABASE_HOST=localhost
@@ -52,7 +53,7 @@ npm install
 
     JWT_SECRET=a8b3c1d9e7f5a2b8d4e6f3a1c9d8b7c6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0
     JWT_EXPIRES_IN=1d
-    ```
+
 
 ### 3. Database Setup
 
