@@ -1,9 +1,12 @@
+// /Users/jalalsmac/event-buddy/backend/src/events/events.controller.ts
+
 import {
   Controller,
   Get,
   Post,
   Body,
   Patch,
+  Param, // Import Param
   Delete,
   UseGuards,
   HttpCode,
@@ -15,7 +18,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
-import { UpdatePayloadDto } from './dto/update-payload.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
 import { IdentifierDto } from './dto/identifier.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
@@ -53,7 +56,9 @@ export class EventsController {
   @UseInterceptors(FileInterceptor('image', multerOptions))
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createEventDto: CreateEventDto, @UploadedFile() file: Express.Multer.File) {
-    if (file) createEventDto.imageUrl = `/uploads/${file.filename}`;
+    if (file) {
+      createEventDto.imageUrl = `/uploads/${file.filename}`;
+    }
     delete (createEventDto as any).image;
     return this.eventsService.create(createEventDto);
   }
@@ -73,12 +78,26 @@ export class EventsController {
     return this.eventsService.findOne(identifierDto.id);
   }
 
-  @Patch()
+  // --- FIX: Corrected the update endpoint ---
+  @Patch(':id') // The route now accepts the ID as a parameter
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
-  update(@Body() updatePayload: UpdatePayloadDto) {
-    return this.eventsService.update(updatePayload.id, updatePayload.data);
+  @UseInterceptors(FileInterceptor('image', multerOptions))
+  update(
+    @Param('id') id: string, // Get the ID from the URL parameter
+    @Body() updateEventDto: UpdateEventDto,
+    @UploadedFile() file: Express.Multer.File | undefined,
+  ) {
+    if (file) {
+      updateEventDto.imageUrl = `/uploads/${file.filename}`;
+    }
+    
+    // No need to delete 'id' from the DTO as it's no longer present
+    delete (updateEventDto as any).image; 
+    
+    return this.eventsService.update(id, updateEventDto);
   }
+  // --- END OF FIX ---
 
   @Delete()
   @UseGuards(RolesGuard)

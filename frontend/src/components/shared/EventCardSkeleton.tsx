@@ -1,44 +1,65 @@
-// src/components/shared/EventCardSkeleton.tsx
+// frontend/src/components/shared/EventCardSkeleton.tsx
+
+import React from 'react';
+
 const EventCardSkeleton = () => {
-    return (
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
-        <div className="h-48 bg-gray-300"></div>
-        <div className="p-6">
-          <div className="flex items-start gap-4">
-            {/* Date Block Skeleton */}
-            <div className="flex flex-col items-center">
-              <div className="h-4 w-10 bg-gray-300 rounded"></div>
-              <div className="mt-1 h-8 w-8 bg-gray-400 rounded"></div>
-            </div>
-            {/* Title and Description Skeleton */}
-            <div className="flex-1">
-              <div className="h-6 w-3/4 bg-gray-400 rounded"></div>
-              <div className="mt-2 h-4 w-full bg-gray-300 rounded"></div>
-              <div className="mt-1 h-4 w-5/6 bg-gray-300 rounded"></div>
-            </div>
+  return (
+    // The container mimics the structure of the real EventCard article
+    <div className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col">
+      {/* Image Skeleton */}
+      <div className="relative h-48 w-full bg-gray-200 animate-pulse"></div>
+
+      {/* Content Skeleton */}
+      <div className="p-5 flex flex-col flex-grow">
+        <div className="flex items-start gap-4">
+          {/* Date Skeleton */}
+          <div className="flex-shrink-0 flex flex-col items-center gap-1">
+            <div className="h-3 w-8 bg-gray-300 rounded-sm animate-pulse"></div>
+            <div className="h-8 w-8 bg-gray-200 rounded-md animate-pulse"></div>
           </div>
-  
-          {/* Details Skeleton */}
-          <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-medium-gray">
-            <div className="h-4 w-24 bg-gray-300 rounded"></div>
-            <div className="h-4 w-20 bg-gray-300 rounded"></div>
-            <div className="h-4 w-32 bg-gray-300 rounded"></div>
-          </div>
-  
-          {/* Tags Skeleton */}
-          <div className="mt-4 flex flex-wrap gap-2">
-            <div className="h-6 w-16 bg-gray-200 rounded-full"></div>
-            <div className="h-6 w-24 bg-gray-200 rounded-full"></div>
-            <div className="h-6 w-12 bg-gray-200 rounded-full"></div>
-          </div>
-  
-          <div className="mt-4 border-t border-light-gray pt-4 flex justify-between text-sm">
-            <div className="h-5 w-28 bg-gray-300 rounded"></div>
-            <div className="h-5 w-24 bg-gray-300 rounded"></div>
+          
+          {/* Title and Info Skeleton */}
+          <div className="flex-grow space-y-2">
+            <div className="h-5 w-3/4 bg-gray-300 rounded-sm animate-pulse"></div>
+            <div className="h-3 w-full bg-gray-200 rounded-sm animate-pulse"></div>
+            <div className="h-3 w-5/6 bg-gray-200 rounded-sm animate-pulse"></div>
           </div>
         </div>
+        
+        {/* Detailed Info Skeleton */}
+        <div className="mt-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <div className="h-4 w-4 bg-gray-200 rounded-full animate-pulse"></div>
+            <div className="h-3 w-1/3 bg-gray-200 rounded-sm animate-pulse"></div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-4 w-4 bg-gray-200 rounded-full animate-pulse"></div>
+            <div className="h-3 w-1/4 bg-gray-200 rounded-sm animate-pulse"></div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-4 w-4 bg-gray-200 rounded-full animate-pulse"></div>
+            <div className="h-3 w-1/2 bg-gray-200 rounded-sm animate-pulse"></div>
+          </div>
+        </div>
+        
+        {/* Tags Skeleton */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <div className="h-5 w-12 bg-gray-200 rounded-full animate-pulse"></div>
+          <div className="h-5 w-20 bg-gray-200 rounded-full animate-pulse"></div>
+          <div className="h-5 w-16 bg-gray-200 rounded-full animate-pulse"></div>
+        </div>
+
+        {/* Spacer */}
+        <div className="flex-grow"></div>
+        
+        {/* Footer Skeleton */}
+        <div className="mt-5 pt-4 border-t border-light-gray flex justify-between items-center">
+          <div className="h-4 w-1/4 bg-gray-200 rounded-sm animate-pulse"></div>
+          <div className="h-4 w-1/3 bg-gray-200 rounded-sm animate-pulse"></div>
+        </div>
       </div>
-    );
-  };
-  
-  export default EventCardSkeleton;
+    </div>
+  );
+};
+
+export default EventCardSkeleton;

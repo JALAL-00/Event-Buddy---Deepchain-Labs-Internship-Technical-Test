@@ -1,63 +1,109 @@
-// src/context/AuthContext.tsx
-'use client';
+// frontend/src/context/AuthContext.tsx
 
-import { createContext, useState, useEffect, ReactNode } from 'react';
-import Cookies from 'js-cookie';
-import { jwtDecode } from 'jwt-decode';
+'use client'; 
 
-interface User {
-  id: string;
-  email: string;
-  role: 'ADMIN' | 'USER';
-  fullName?: string; // We'll add this later if needed
-}
+import React, { createContext, useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { IUser } from '@/types';
+import api from '@/lib/axios';
 
+// --- (No changes to the types or interface) ---
+type LoginData = { email: string; password: string; };
+type RegisterData = LoginData & { fullName: string; };
 interface AuthContextType {
+  user: IUser | null;
   isAuthenticated: boolean;
-  user: User | null;
-  login: (token: string) => void;
-  logout: () => void;
   isLoading: boolean;
+  login: (data: LoginData) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
+  logout: () => void;
 }
+// --- (End of unchanged section) ---
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    // Check for token on initial load
-    const token = Cookies.get('auth_token');
-    if (token) {
-      try {
-        const decoded = jwtDecode<User & { sub: string }>(token);
-        // 'sub' is the standard JWT property for subject (usually user ID)
-        setUser({ id: decoded.sub, email: decoded.email, role: decoded.role });
-      } catch (error) {
-        console.error('Invalid token found', error);
-        Cookies.remove('auth_token');
+    const loadUserFromToken = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const { data } = await api.get('/auth/profile');
+          setUser(data);
+        } catch (error) {
+          console.error('Failed to load user from token:', error);
+          localStorage.removeItem('token');
+        }
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    };
+    loadUserFromToken();
   }, []);
 
-  const login = (token: string) => {
-    Cookies.set('auth_token', token, { expires: 1, secure: true, sameSite: 'strict' });
-    const decoded = jwtDecode<User & { sub: string }>(token);
-    setUser({ id: decoded.sub, email: decoded.email, role: decoded.role });
+  const login = async (data: LoginData) => {
+    // ... login function is unchanged
+    try {
+      const response = await api.post('/auth/login', data);
+      const { access_token } = response.data;
+      localStorage.setItem('token', access_token);
+      const profileResponse = await api.get('/auth/profile');
+      setUser(profileResponse.data);
+      if (profileResponse.data.role === 'ADMIN') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/user/dashboard');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
   };
 
+  const register = async (data: RegisterData) => {
+    // ... register function is unchanged
+    try {
+      await api.post('/auth/register', data);
+      await login({ email: data.email, password: data.password });
+    } catch (error) {
+      console.error('Registration failed:', error);
+      throw error;
+    }
+  };
+  
+  // --- THIS IS THE DEFINITIVE FIX FOR LOGOUT ---
   const logout = () => {
-    Cookies.remove('auth_token');
-    setUser(null);
-    window.location.href = '/login'; // Redirect to login page
-  };
+    // First, command the router to go to the homepage.
+    router.push('/');
 
-  const isAuthenticated = !!user;
+    // THEN, wrap the state-clearing logic in a setTimeout.
+    // This gives the router time to navigate away from the protected layout
+    // BEFORE the isAuthenticated flag turns false. This prevents the
+    // layout's own redirect logic from firing.
+    setTimeout(() => {
+        setUser(null);
+        localStorage.removeItem('token');
+    }, 100); // A small delay is enough to ensure navigation completes.
+  };
+  // --- END OF CORRECTION ---
+
+  const contextValue = useMemo(
+    () => ({
+      user,
+      isAuthenticated: !!user,
+      isLoading,
+      login,
+      register,
+      logout,
+    }),
+    [user, isLoading]
+  );
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, isLoading }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

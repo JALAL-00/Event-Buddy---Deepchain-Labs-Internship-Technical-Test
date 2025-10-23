@@ -1,113 +1,110 @@
-// src/app/(auth)/login/page.tsx
-'use client';
+// frontend/src/app/(auth)/login/page.tsx
 
-import { useState } from 'react';
+'use client'; // This is an interactive form, so it must be a Client Component.
+
+import { useState, FormEvent } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import api from '@/lib/axios';
 import { useAuth } from '@/hooks/useAuth';
-import { jwtDecode } from 'jwt-decode';
-
-interface DecodedToken {
-    role: 'ADMIN' | 'USER';
-}
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+  const { login } = useAuth(); // Get the login function from our AuthContext.
+  
+  // State for form inputs
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  
+  // State for handling submission status and errors
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (event: FormEvent) => {
+    // Prevent the form's default reload behavior
+    event.preventDefault(); 
     
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const { login } = useAuth(); // Get the login function from our context
-    const registered = searchParams.get('registered');
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setLoading(true);
-      setError(null);
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      // Call the login function from the context
+      await login({ email, password });
+      // The context handles redirection on success, so we don't need to do it here.
+    } catch (err: any) {
+      // If the context's login function throws an error, we catch it here.
+      const errorMessage = err.response?.data?.message || 'Login failed. Please check your credentials and try again.';
+      setError(errorMessage);
+    } finally {
+      // Ensure the loading state is turned off, whether success or failure
+      setIsLoading(false);
+    }
+  };
   
-      try {
-        const response = await api.post('/auth/login', { email, password });
-        const { access_token } = response.data;
-        
-        // Use our context's login function to set the state and cookie
-        login(access_token); 
-
-        const decodedToken = jwtDecode<DecodedToken>(access_token);
-
-        // Redirect based on role
-        if (decodedToken.role === 'ADMIN') {
-            router.replace('/admin/dashboard');
-        } else {
-            router.replace('/user/dashboard'); // Or '/' if you prefer the homepage
-        }
-        
-      } catch (err: any) {
-        setError(err.response?.data?.message || 'Login failed. Invalid credentials.');
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    return (
-      <div 
-          className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg"
-          style={{ clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%)' }}
-      >
-        <h2 className="text-3xl font-bold text-center text-dark-gray">Sign in</h2>
-        <p className="text-center text-medium-gray">
+  return (
+    <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+      <div className="text-left mb-6">
+        <h2 className="text-2xl font-bold text-dark-gray">Sign in</h2>
+        <p className="mt-2 text-sm text-medium-gray">
           New User?{' '}
           <Link href="/register" className="font-semibold text-primary-blue hover:underline">
             Create an account
           </Link>
         </p>
-
-        {registered && <div className="p-3 text-sm text-center text-green-800 bg-green-100 rounded-lg">Registration successful! Please sign in.</div>}
-        {error && <div className="p-3 text-sm text-center text-red-800 bg-red-100 rounded-lg">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
+      </div>
+      
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="space-y-6">
+          {/* Email Input */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-dark-gray">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
+            <label htmlFor="email" className="form-label">Email</label>
+            <input 
+              id="email" 
+              name="email" 
+              type="email" 
+              autoComplete="email" 
               required
+              placeholder="enter your email"
+              className="form-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="enter your email"
-              className="mt-1 block w-full px-4 py-3 bg-gray-50 border border-light-gray rounded-md shadow-sm focus:outline-none focus:ring-primary-blue focus:border-primary-blue"
+              disabled={isLoading}
             />
           </div>
-
+          
+          {/* Password Input */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-dark-gray">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
+            <label htmlFor="password" className="form-label">Password</label>
+            <input 
+              id="password" 
+              name="password" 
+              type="password" 
               autoComplete="current-password"
               required
+              placeholder="enter your password"
+              className="form-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="enter your password"
-              className="mt-1 block w-full px-4 py-3 bg-gray-50 border border-light-gray rounded-md shadow-sm focus:outline-none focus:ring-primary-blue focus:border-primary-blue"
+              disabled={isLoading}
             />
           </div>
 
+          {/* Error Message Display */}
+          {error && (
+            <p className="form-error text-center bg-red-50 border border-red-200 p-3 rounded-md">
+              {error}
+            </p>
+          )}
+          
+          {/* Submit Button */}
           <div>
             <button
               type="submit"
-              disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-primary-blue hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 transition-colors"
+              className="w-full form-btn-primary"
+              disabled={isLoading}
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
-        </form>
-      </div>
-    );
+        </div>
+      </form>
+    </div>
+  );
 }

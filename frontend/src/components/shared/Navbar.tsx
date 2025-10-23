@@ -1,39 +1,104 @@
-// src/components/shared/Navbar.tsx
+// frontend/src/components/shared/Navbar.tsx
+
+'use client'; 
+
 import Link from 'next/link';
+import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 const Navbar = () => {
-  return (
-    <header className="absolute top-0 left-0 w-full z-10 py-6">
-      <nav className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        {/* Logo */}
-        <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2 text-2xl font-bold text-dark-gray">
-              {/* This is a simple SVG placeholder for the logo */}
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="32" height="32" rx="8" fill="#4F46E5"/>
-                <path d="M12 21V11L18 16L12 21Z" fill="white"/>
-                <path d="M20 21V11H18V21H20Z" fill="white"/>
-              </svg>
-              <span>Event buddy.</span>
-            </Link>
-        </div>
+  const { user, isAuthenticated, isLoading, logout } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-        {/* Auth Buttons */}
-        <div className="flex items-center space-x-2">
-          {/* CORRECTED "SIGN IN" BUTTON STYLE */}
-          <Link href="/login">
-            <button className="px-6 py-2.5 text-sm font-semibold text-white bg-primary-blue rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-300">
-              Sign In
-            </button>
-          </Link>
-          <Link href="/register">
-            <button className="px-6 py-2.5 text-sm font-semibold text-white bg-primary-blue rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-300">
-              Sign Up
-            </button>
-          </Link>
+  const renderAuthLinks = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center space-x-2 animate-pulse">
+          <div className="h-8 w-20 bg-gray-300 rounded-md"></div>
+          <div className="h-8 w-20 bg-gray-300 rounded-md"></div>
         </div>
-      </nav>
-    </header>
+      );
+    }
+    
+    // The check "isAuthenticated && user" remains the same. The change is below.
+    if (isAuthenticated && user) {
+      const dashboardHref = user.role === 'ADMIN' ? '/admin/dashboard' : '/user/dashboard';
+      
+      // --- THIS IS THE CORRECTED LINE ---
+      // We use optional chaining (?.) and a fallback ('User').
+      // This says: "If user.fullName exists, split it. If not, use 'User'."
+      // It gracefully handles the brief moment when `user` exists but its data isn't full.
+      const displayName = user.fullName?.split(' ')[0] || 'User';
+      // --- END OF CORRECTION ---
+
+      return (
+        <div className="flex items-center space-x-4">
+          <Link href={dashboardHref} className="text-dark-gray hover:text-primary-blue font-semibold">
+            Hello, {displayName} {/* Now using the safe variable */}
+          </Link>
+          <button
+            onClick={logout}
+            className="px-4 py-2 text-sm font-semibold text-white bg-primary-blue rounded-lg shadow-sm hover:bg-indigo-600 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="flex items-center space-x-2">
+        <Link href="/login">
+          <span className="px-4 py-2 text-sm font-semibold text-primary-blue border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+            Sign in
+          </span>
+        </Link>
+        <Link href="/register">
+          <span className="px-4 py-2 text-sm font-semibold text-white bg-primary-blue rounded-lg shadow-sm hover:bg-indigo-600 transition-colors">
+            Sign up
+          </span>
+        </Link>
+      </div>
+    );
+  };
+  
+  // The rest of the component is unchanged.
+  return (
+    <nav className="bg-light-violet/80 backdrop-blur-sm sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex-shrink-0">
+            <Link href="/" className="flex items-center space-x-2">
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-blue"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+              <span className="font-bold text-xl text-dark-gray">Event buddy.</span>
+            </Link>
+          </div>
+          <div className="hidden md:block">
+            {renderAuthLinks()}
+          </div>
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-dark-gray hover:text-white hover:bg-primary-blue focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+            >
+              <span className="sr-only">Open main menu</span>
+              {isMenuOpen ? (
+                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              ) : (
+                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden`}>
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <div className="flex flex-col items-center space-y-2">
+            {renderAuthLinks()}
+          </div>
+        </div>
+      </div>
+    </nav>
   );
 };
 
