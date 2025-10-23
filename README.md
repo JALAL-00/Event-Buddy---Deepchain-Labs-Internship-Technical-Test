@@ -130,17 +130,29 @@ To run the full application locally, you will need to set up and run both the ba
 
 ---
 
-## Admin Credentials & API Examples
+## Test Credentials & Usage
 
-You can interact with the platform through the UI or test the API directly.
+To test the different user roles, use the following credentials on the application's login and registration pages.
 
-### Admin Access
-The backend automatically creates an admin user on its first run.
+### Admin Account (Auto-created)
+The backend automatically creates an admin user on its first run. Go to the login page (`http://localhost:3001/login`) and use these details to access the admin dashboard.
 
 - **Email:** `admin.jalal@gmail.com`
 - **Password:** `AdminJalal123@`
 
-### API Usage Examples (`cURL`)
+### Regular User Account (Manual Registration)
+To test as a regular user, you must first register a new account.
+
+**1. Go to the Sign Up page:** `http://localhost:3001/register`
+**2. Enter the following details:**
+- **Full Name:** `Jalal Uddin`
+- **Email:** `jalaluddin0046@gmail.com`
+- **Password:** `ValidPassword123@`
+
+After registering, the application will automatically log you in and redirect you to the user dashboard. You can then log out and log back in using this email and password.
+
+### Testing the API Directly with cURL (Optional)
+For backend developers, the API can also be tested directly.
 
 #### User Registration
 ```bash
@@ -151,27 +163,3 @@ curl -X POST http://localhost:3000/auth/register \
   "email": "jalaluddin0046@gmail.com",
   "password": "ValidPassword123@"
 }'
-
-#### User Login
-```bash
-curl -X POST http://localhost:3000/auth/login \
--H "Content-Type: application/json" \
--d '{
-  "email": "jalaluddin0046@gmail.com",
-  "password": "ValidPassword123@"
-}'
-
-#### Admin Login
-```bash
-curl -X POST http://localhost:3000/auth/login \
--H "Content-Type: application/json" \
--d '{
-    "email": "admin.jalal@gmail.com",
-    "password": "AdminJalal123@"
-}'
-
-### Further Information
-For more specific details about the implementation of each part of the application, please see the individual README files within this repository:
-
-Backend README
-Frontend README
