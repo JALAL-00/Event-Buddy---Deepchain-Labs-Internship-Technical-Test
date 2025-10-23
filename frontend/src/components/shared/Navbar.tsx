@@ -20,21 +20,19 @@ const Navbar = () => {
       );
     }
     
-    // The check "isAuthenticated && user" remains the same. The change is below.
     if (isAuthenticated && user) {
       const dashboardHref = user.role === 'ADMIN' ? '/admin/dashboard' : '/user/dashboard';
       
-      // --- THIS IS THE CORRECTED LINE ---
-      // We use optional chaining (?.) and a fallback ('User').
-      // This says: "If user.fullName exists, split it. If not, use 'User'."
-      // It gracefully handles the brief moment when `user` exists but its data isn't full.
-      const displayName = user.fullName?.split(' ')[0] || 'User';
-      // --- END OF CORRECTION ---
+      // FIX: Added role-based logic for displayName
+      const displayName =
+        user.role === 'ADMIN'
+          ? 'Admin'
+          : user.fullName?.split(' ')[0] || 'User';
 
       return (
         <div className="flex items-center space-x-4">
           <Link href={dashboardHref} className="text-dark-gray hover:text-primary-blue font-semibold">
-            Hello, {displayName} {/* Now using the safe variable */}
+            Hello, {displayName}
           </Link>
           <button
             onClick={logout}
@@ -62,7 +60,6 @@ const Navbar = () => {
     );
   };
   
-  // The rest of the component is unchanged.
   return (
     <nav className="bg-light-violet/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

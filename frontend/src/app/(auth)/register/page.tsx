@@ -68,7 +68,7 @@ export default function RegisterPage() {
               type="text" 
               autoComplete="name" 
               required
-              placeholder="e.g. John Doe"
+              placeholder="Jalal Uddin"
               className="form-input"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}

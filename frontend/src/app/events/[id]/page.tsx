@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,34 +16,21 @@ import EventDetailSkeleton from '@/components/shared/EventDetailSkeleton';
 export default function EventDetailPage() {
   const { id: eventId } = useParams();
   const router = useRouter();
+  // We need the full user object to check their role
   const { isAuthenticated, user } = useAuth();
   
   const [event, setEvent] = useState<IEvent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // State for booking
   const [selectedSeats, setSelectedSeats] = useState<number>(1);
   const [isBooking, setIsBooking] = useState<boolean>(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
 
-  // Helper for date formatting
   const formatDateDetails = (isoDate: string) => {
     if (!isoDate) return { full: '', time: '' };
     const date = new Date(isoDate);
-    const full = date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-    // Assuming your time is part of the main date string.
-    // In your backend, you save a combined 'date' field, so we just format it.
-    const time = date.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-    }).replace(' ', ''); // e.g., 03:00-05:00 PM (simplified for example)
+    const full = date.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
     return { full, time };
   };
   
@@ -68,25 +55,17 @@ export default function EventDetailPage() {
 
   const handleBooking = async () => {
     if (!isAuthenticated) {
-        // As per project requirements, prompt login if not authenticated
         router.push('/login');
         return;
     }
-
     if (!event || event.spotsLeft === 0 || new Date(event.date) < new Date()) {
       setBookingError("This event cannot be booked.");
       return;
     }
-
     setIsBooking(true);
     setBookingError(null);
-
     try {
-        await api.post('/bookings', {
-            eventId: event.id,
-            numberOfSeats: selectedSeats
-        });
-        // Success! Redirect to user's dashboard to see their booking
+        await api.post('/bookings', { eventId: event.id, numberOfSeats: selectedSeats });
         router.push('/user/dashboard');
     } catch (err: any) {
         const message = err.response?.data?.message || 'An unexpected error occurred.';
@@ -110,16 +89,17 @@ export default function EventDetailPage() {
 
   if (error || !event) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-danger-red">{error}</p>
-      </div>
+      <>
+        <Navbar />
+        <main className="min-h-[60vh] flex items-center justify-center">
+            <p className="text-xl text-danger-red">{error}</p>
+        </main>
+        <Footer />
+      </>
     );
   }
 
-  const imageUrl = event.imageUrl
-    ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${event.imageUrl}`
-    : '/images/event-placeholder.png';
-
+  const imageUrl = event.imageUrl ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${event.imageUrl}` : '/images/event-placeholder.png';
   const isEventPast = new Date(event.date) < new Date();
 
   return (
@@ -132,94 +112,65 @@ export default function EventDetailPage() {
         </Link>
         
         <article>
-          {/* Main Event Image */}
-          <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden shadow-lg">
-              <Image src={imageUrl} alt={event.title} layout="fill" objectFit="cover" />
-          </div>
-
-          {/* Tags */}
-          <div className="mt-8 flex flex-wrap gap-2">
-            {event.tags.map(tag => (
-              <span key={tag} className="px-3 py-1 text-sm font-semibold text-primary-blue bg-indigo-100 rounded-full">{tag}</span>
-            ))}
-          </div>
-          
+          <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden shadow-lg"><Image src={imageUrl} alt={event.title} layout="fill" objectFit="cover" /></div>
+          <div className="mt-8 flex flex-wrap gap-2">{event.tags.map(tag => (<span key={tag} className="px-3 py-1 text-sm font-semibold text-primary-blue bg-indigo-100 rounded-full">{tag}</span>))}</div>
           <h1 className="mt-4 text-3xl md:text-4xl font-extrabold text-dark-gray">{event.title}</h1>
           
-          {/* Info boxes */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 my-8 p-6 bg-white rounded-lg shadow-sm border border-light-gray">
-              {/* Date */}
               <div className="flex items-center gap-4">
-                  <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 text-primary-blue">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
-                  </div>
-                  <div>
-                      <h4 className="font-semibold text-dark-gray">Date</h4>
-                      <p className="text-sm text-medium-gray">{formattedDate.full}</p>
-                  </div>
+                  <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg></div>
+                  <div><h4 className="font-semibold text-dark-gray">Date</h4><p className="text-sm text-medium-gray">{formattedDate.full}</p></div>
               </div>
-               {/* Time */}
               <div className="flex items-center gap-4">
-                   <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 text-primary-blue">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  </div>
-                  <div>
-                      <h4 className="font-semibold text-dark-gray">Time</h4>
-                      <p className="text-sm text-medium-gray">{formattedDate.time}</p>
-                  </div>
+                   <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                  <div><h4 className="font-semibold text-dark-gray">Time</h4><p className="text-sm text-medium-gray">{formattedDate.time}</p></div>
               </div>
-              {/* Location */}
               <div className="flex items-center gap-4">
-                  <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 text-primary-blue">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                  </div>
-                  <div>
-                      <h4 className="font-semibold text-dark-gray">Location</h4>
-                      <p className="text-sm text-medium-gray">{event.location}</p>
-                  </div>
+                  <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
+                  <div><h4 className="font-semibold text-dark-gray">Location</h4><p className="text-sm text-medium-gray">{event.location}</p></div>
               </div>
           </div>
           
-           {/* Booking Section */}
-          {!isEventPast && event.spotsLeft > 0 && (
-          <div className="p-8 bg-white rounded-lg shadow-sm border border-light-gray">
-              <h3 className="font-bold text-xl text-center text-dark-gray">Select Number of Seats</h3>
-              <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-lg mx-auto">
-                {[1, 2, 3, 4].map((num) => (
-                    <button 
-                        key={num}
-                        onClick={() => setSelectedSeats(num)}
-                        disabled={num > event.spotsLeft}
-                        className={`p-4 rounded-lg border-2 text-center transition-all duration-200 
-                            ${selectedSeats === num ? 'bg-primary-blue border-primary-blue text-white shadow-lg' : 'bg-gray-50 border-gray-200 text-dark-gray hover:border-primary-blue'}
-                            ${num > event.spotsLeft ? 'opacity-50 cursor-not-allowed' : ''}
-                        `}>
-                      <span className="font-bold text-3xl block">{num}</span>
-                      <span className="text-sm">{num === 1 ? 'Seat' : 'Seats'}</span>
-                    </button>
-                ))}
-              </div>
-              <div className="mt-8 text-center">
-                  <button onClick={handleBooking} disabled={isBooking} className="form-btn-primary px-10 py-3">
-                     {isBooking ? 'Booking...' : `Book ${selectedSeats} ${selectedSeats === 1 ? 'Seat' : 'Seats'}`}
-                  </button>
-              </div>
-               {bookingError && <p className="mt-4 text-center text-danger-red">{bookingError}</p>}
-          </div>
+           {/* --- FIX: Updated Booking Section Logic --- */}
+           {/* Case 1: The user is NOT an admin (or not logged in) AND the event is bookable */}
+          {(user?.role !== 'ADMIN') && !isEventPast && event.spotsLeft > 0 && (
+            <div className="p-8 bg-white rounded-lg shadow-sm border border-light-gray">
+                <h3 className="font-bold text-xl text-center text-dark-gray">Select Number of Seats</h3>
+                <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-lg mx-auto">
+                  {[1, 2, 3, 4].map((num) => (
+                      <button 
+                          key={num} onClick={() => setSelectedSeats(num)} disabled={num > event.spotsLeft}
+                          className={`p-4 rounded-lg border-2 text-center transition-all duration-200 
+                              ${selectedSeats === num ? 'bg-primary-blue border-primary-blue text-white shadow-lg' : 'bg-gray-50 border-gray-200 text-dark-gray hover:border-primary-blue'}
+                              ${num > event.spotsLeft ? 'opacity-50 cursor-not-allowed' : ''}
+                          `}>
+                        <span className="font-bold text-3xl block">{num}</span><span className="text-sm">{num === 1 ? 'Seat' : 'Seats'}</span>
+                      </button>
+                  ))}
+                </div>
+                <div className="mt-8 text-center"><button onClick={handleBooking} disabled={isBooking} className="form-btn-primary px-10 py-3">{isBooking ? 'Booking...' : `Book ${selectedSeats} ${selectedSeats === 1 ? 'Seat' : 'Seats'}`}</button></div>
+                 {bookingError && <p className="mt-4 text-center text-danger-red">{bookingError}</p>}
+            </div>
           )}
+
+           {/* Case 2: The user IS an admin and the event is not past */}
+           {user?.role === 'ADMIN' && !isEventPast && (
+            <div className="p-4 text-center bg-indigo-100 text-primary-blue rounded-lg font-semibold">
+                This is an Admin view. Admin not allow for Booking.
+            </div>
+           )}
+           {/* --- END OF FIX --- */}
            
           {isEventPast && <div className="p-4 bg-gray-100 text-center text-medium-gray rounded-lg">This event has already passed.</div>}
-          {event.spotsLeft === 0 && <div className="p-4 bg-red-100 text-center text-danger-red rounded-lg">This event is fully booked.</div>}
+          {event.spotsLeft === 0 && !isEventPast && <div className="p-4 bg-red-100 text-center text-danger-red rounded-lg">This event is fully booked.</div>}
 
-          {/* About this event */}
           <div className="mt-12">
             <h2 className="text-2xl font-bold text-dark-gray">About this event</h2>
-            <div className="mt-4 prose text-medium-gray max-w-none">
-                {event.description.split('\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+            <div className="mt-4 prose-sm sm:prose-base text-medium-gray max-w-none">
+                {event.description.split('\n').filter(p => p).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
             </div>
           </div>
           
-           {/* Floating Bottom Info */}
           <div className="mt-12 flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm border border-light-gray">
              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-blue"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
              <p className="font-bold text-lg text-dark-gray">
