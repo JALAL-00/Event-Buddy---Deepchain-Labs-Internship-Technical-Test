@@ -6,48 +6,7 @@ This project was built as a technical test, fulfilling all specified requirement
 
 ---
 
-## Key Features
-
-The application is divided into three core functional areas:
-
-### 👤 **User Functionality**
-- **Event Discovery:** Browse paginated lists of upcoming and past events.
-- **Detailed View:** See full event details, including description, date, location, and real-time remaining spots.
-- **Secure Authentication:** Seamless user registration and JWT-based login.
-- **Seat Booking:** Authenticated users can book between 1 to 4 seats for any upcoming event.
-- **Personal Dashboard:** View and manage all registered events, with the ability to cancel bookings.
-
-### ⚙️ **Admin Functionality**
-- **Protected Dashboard:** Role-based access ensures only administrators can access the event management panel.
-- **Full CRUD Operations:**
-  - **Create:** Add new events through a rich form with image upload capabilities.
-  - **Read:** View a comprehensive list of all events and their live registration status.
-  - **Update:** Edit any detail of an existing event.
-  - **Delete:** Remove events from the platform.
-- **System Monitoring:** At-a-glance view of event registrations to monitor performance.
-
----
-
-## Technology Stack
-
-This project is a modern full-stack monorepo with a clear separation between the client and server applications.
-
-### 🖥️ Frontend
-- **Framework:** **Next.js** (App Router)
-- **Language:** **TypeScript**
-- **Styling:** **Tailwind CSS**
-- **API Communication:** **Axios**
-- **State Management:** **React Context API**
-
-### 🗄️ Backend
-- **Framework:** **NestJS**
-- **Language:** **TypeScript**
-- **Database:** **PostgreSQL** with **TypeORM**
-- **Authentication:** **JWT** with **Passport.js**
-
----
-
-## Getting Started & How to Run
+# Getting Started & How to Run
 
 To run the full application locally, you will need to set up and run both the backend and the frontend. **The backend server must be running before you start the frontend.**
 
@@ -183,3 +142,44 @@ After registering, the application will automatically log you in and redirect yo
 
 ### Sign Up
 ![Image](https://github.com/user-attachments/assets/8f5cee34-52cc-45a4-8ef7-577c29549bca)
+
+---
+
+# Key Features
+
+The application is divided into three core functional areas:
+
+### 👤 **User Functionality**
+- **Event Discovery:** Browse paginated lists of upcoming and past events.
+- **Detailed View:** See full event details, including description, date, location, and real-time remaining spots.
+- **Secure Authentication:** Seamless user registration and JWT-based login.
+- **Seat Booking:** Authenticated users can book between 1 to 4 seats for any upcoming event.
+- **Personal Dashboard:** View and manage all registered events, with the ability to cancel bookings.
+
+### ⚙️ **Admin Functionality**
+- **Protected Dashboard:** Role-based access ensures only administrators can access the event management panel.
+- **Full CRUD Operations:**
+  - **Create:** Add new events through a rich form with image upload capabilities.
+  - **Read:** View a comprehensive list of all events and their live registration status.
+  - **Update:** Edit any detail of an existing event.
+  - **Delete:** Remove events from the platform.
+- **System Monitoring:** At-a-glance view of event registrations to monitor performance.
+
+---
+
+## Technology Stack
+
+This project is a modern full-stack monorepo with a clear separation between the client and server applications.
+
+### 🖥️ Frontend
+- **Framework:** **Next.js** (App Router)
+- **Language:** **TypeScript**
+- **Styling:** **Tailwind CSS**
+- **API Communication:** **Axios**
+- **State Management:** **React Context API**
+
+### 🗄️ Backend
+- **Framework:** **NestJS**
+- **Language:** **TypeScript**
+- **Database:** **PostgreSQL** with **TypeORM**
+- **Authentication:** **JWT** with **Passport.js**
