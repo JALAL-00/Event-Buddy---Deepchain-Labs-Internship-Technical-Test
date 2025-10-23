@@ -6,7 +6,7 @@ import {
   Post,
   Body,
   Patch,
-  Param, // Import Param
+  Param, 
   Delete,
   UseGuards,
   HttpCode,
@@ -78,13 +78,12 @@ export class EventsController {
     return this.eventsService.findOne(identifierDto.id);
   }
 
-  // --- FIX: Corrected the update endpoint ---
-  @Patch(':id') // The route now accepts the ID as a parameter
+  @Patch(':id') 
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
   @UseInterceptors(FileInterceptor('image', multerOptions))
   update(
-    @Param('id') id: string, // Get the ID from the URL parameter
+    @Param('id') id: string, 
     @Body() updateEventDto: UpdateEventDto,
     @UploadedFile() file: Express.Multer.File | undefined,
   ) {
@@ -92,12 +91,10 @@ export class EventsController {
       updateEventDto.imageUrl = `/uploads/${file.filename}`;
     }
     
-    // No need to delete 'id' from the DTO as it's no longer present
     delete (updateEventDto as any).image; 
     
     return this.eventsService.update(id, updateEventDto);
   }
-  // --- END OF FIX ---
 
   @Delete()
   @UseGuards(RolesGuard)

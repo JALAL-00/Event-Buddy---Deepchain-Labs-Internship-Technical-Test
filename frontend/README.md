@@ -4,10 +4,8 @@ This is the frontend for Event Buddy, a full-stack event booking platform built 
 
 The user interface is designed to be modern, responsive, and intuitive, adhering to the designs provided in the Figma specification.
 
-- **Figma Prototype:** [Clickable Prototype Link](https://www.figma.com/proto/YOUR_PROTOTYPE_LINK)
-- **UI Screens:** [UI Screens Link](https://www.figma.com/file/YOUR_UI_SCREENS_LINK)
-
- <!-- Optional: Replace with a screenshot of your running application -->
+- **Figma Prototype:** [View the Clickable Prototype](https://www.figma.com/proto/YOUR_PROTOTYPE_LINK) <!-- Replace with your Figma link -->
+- **UI Screens:** [View the UI Screens](https://www.figma.com/file/YOUR_UI_SCREENS_LINK) <!-- Replace with your Figma link -->
 
 ---
 
@@ -60,7 +58,7 @@ Follow these instructions to get the frontend development environment set up and
 
 - [Node.js](https://nodejs.org/) (v18.x or later is recommended)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- A running instance of the **[Event Buddy Backend](https://github.com/YOUR_USERNAME/event-buddy-backend)**. *This frontend will not function without it.*
+- A running instance of the **[Event Buddy Backend](https://github.com/JALAL-00/Event-Buddy---Deepchain-Labs-Internship-Technical-Test/tree/main/backend)**. *This frontend will not function without it.*
 
 ### Installation & Setup
 
@@ -71,18 +69,16 @@ Follow these instructions to get the frontend development environment set up and
 
 2.  **Navigate to the frontend directory:**
     ```bash
-    cd cd Event-Buddy---Deepchain-Labs-Internship-Technical-Test/frontend
+    cd Event-Buddy---Deepchain-Labs-Internship-Technical-Test/frontend
     ```
 
 3.  **Install dependencies:**
     ```bash
     npm install
-    # or
-    yarn install
     ```
 
 4.  **Set up environment variables:**
-    Create a new file named `.env.local` in the `frontend` directory. This file will hold the URL for your backend API.
+    Create a new file named `.env.local` in the `frontend` directory.
 
     ```bash
     touch .env.local
@@ -97,8 +93,6 @@ Follow these instructions to get the frontend development environment set up and
 5.  **Run the development server:**
     ```bash
     npm run dev
-    # or
-    yarn dev
     ```
 
 6.  **Open the application:**
@@ -106,23 +100,11 @@ Follow these instructions to get the frontend development environment set up and
 
 ---
 
-## Project Structure
+## Admin Credentials
 
-The project follows a standard Next.js App Router structure, organized for clarity and scalability.
+To access the admin dashboard, use the credentials seeded by the backend application:
 
-/src
-├── /app/ # Main routing, layouts, and pages
-│ ├── /(auth)/ # Route group for auth pages (login, register)
-│ ├── /(dashboard)/ # Route group for protected dashboards
-│ ├── /events/[id]/ # Dynamic route for event details
-│ ├── layout.tsx # Root layout
-│ └── page.tsx # Homepage
-│
-├── /components/ # Reusable React components
-│ ├── /shared/ # App-specific components (Navbar, EventCard, etc.)
-│ └── /ui/ # Generic UI components (Modal, Pagination)
-│
-├── /context/ # Global state management (AuthContext)
-├── /hooks/ # Custom React hooks (useAuth)
-├── /lib/ # Core utilities & libraries (axios configuration)
-└── /types/ # TypeScript type definitions and interfaces
+- **Email:** `admin.jalal@gmail.com`
+- **Password:** `AdminJalal123@`
+
+_Note: To change the default admin credentials, edit the variables in `backend/src/seed/seed.service.ts` and reset the database._
