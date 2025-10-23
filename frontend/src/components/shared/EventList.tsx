@@ -1,42 +1,78 @@
-// src/components/shared/EventList.tsx
-import EventCardSkeleton from "./EventCardSkeleton";
+'use client';
 
-// We'll add real data props later
+import { useState, useEffect } from 'react';
+import api from '@/lib/axios';
+import { Event, PaginatedEvents } from '@/types';
+
+import EventCard from './EventCard';
+import EventCardSkeleton from './EventCardSkeleton';
+import Pagination from '../ui/Pagination';
+
 interface EventListProps {
   title: string;
+  type: 'upcoming' | 'past';
 }
 
-const EventList = ({ title }: EventListProps) => {
-  const isLoading = true; // Set to true to show skeletons, we'll replace this later with API state
+const EventList = ({ title, type }: EventListProps) => {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get<PaginatedEvents>(`/events/${type}`, {
+            params: {
+                page: currentPage,
+                limit: 6,
+            }
+        });
+        setEvents(response.data.data);
+        setTotalPages(response.data.totalPages);
+        setError(null);
+      } catch (err) {
+        setError(`Failed to load ${type} events.`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, [type, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <section className="py-12 sm:py-16">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-dark-gray mb-8">{title}</h2>
         
+        {error && <p className="text-center text-danger-red">{error}</p>}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* We'll replace this with a map over real data later */}
-          {isLoading && (
-            <>
-              <EventCardSkeleton />
-              <EventCardSkeleton />
-              <EventCardSkeleton />
-              <EventCardSkeleton />
-              <EventCardSkeleton />
-              <EventCardSkeleton />
-            </>
+          {loading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+                <EventCardSkeleton key={index} />
+            ))
+          ) : (
+            events.map((event) => <EventCard key={event.id} event={event} />)
           )}
         </div>
-
-        {/* Pagination placeholder - we will make this functional later */}
-        <div className="mt-12 flex justify-center items-center space-x-2">
-            <button className="px-4 py-2 text-sm font-semibold text-white bg-primary-blue rounded-md shadow-sm">1</button>
-            <button className="px-4 py-2 text-sm font-semibold text-dark-gray bg-white rounded-md border border-light-gray hover:bg-gray-50">2</button>
-            <button className="px-4 py-2 text-sm font-semibold text-dark-gray bg-white rounded-md border border-light-gray hover:bg-gray-50">3</button>
-            <span className="text-medium-gray">...</span>
-            <button className="px-4 py-2 text-sm font-semibold text-dark-gray bg-white rounded-md border border-light-gray hover:bg-gray-50">67</button>
-            <button className="px-4 py-2 text-sm font-semibold text-dark-gray bg-white rounded-md border border-light-gray hover:bg-gray-50">68</button>
-        </div>
+        
+        {!loading && !error && events.length === 0 && (
+          <p className="text-center text-medium-gray mt-8">No events to show here.</p>
+        )}
+        
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </section>
   );

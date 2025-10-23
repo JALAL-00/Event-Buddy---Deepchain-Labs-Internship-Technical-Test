@@ -1,5 +1,3 @@
-// src/app/page.tsx
-
 import Navbar from "@/components/shared/Navbar";
 import Hero from "@/components/shared/Hero";
 import EventList from "@/components/shared/EventList";
@@ -11,8 +9,8 @@ export default function HomePage() {
       <Navbar />
       <main>
         <Hero />
-        <EventList title="Upcoming Events" />
-        <EventList title="Previous Events" />
+        <EventList title="Upcoming Events" type="upcoming" />
+        <EventList title="Previous Events" type="past" />
       </main>
       <Footer />
     </>
