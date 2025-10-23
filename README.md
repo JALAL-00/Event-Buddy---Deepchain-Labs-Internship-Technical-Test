@@ -154,3 +154,32 @@ After registering, the application will automatically log you in and redirect yo
 **1. Enter the following details:**
 - **Email:** `jalaluddin0046@gmail.com`
 - **Password:** `ValidPassword123@`
+
+# Project Sceenshoots
+
+### Landing Page
+![Image](https://github.com/user-attachments/assets/8f9526c3-649a-47c6-8fe8-8828168445ee)
+
+### User Dashboard
+![Image](https://github.com/user-attachments/assets/50c65d61-b6ee-4ab0-8c66-a6cf77bb8688)
+
+### Admin Dashboard
+![Image](https://github.com/user-attachments/assets/0b728e3d-d057-4390-badc-85afc6782929)
+
+### Event Deatils As User
+![Image](https://github.com/user-attachments/assets/7cec36c1-db0d-4a9a-a1fc-42e1fdf17082)
+
+### Event Deatils As Admin
+![Image](https://github.com/user-attachments/assets/e6540462-35c3-4ba5-8a01-d4ccb780166a)
+
+### Event Create
+![Image](https://github.com/user-attachments/assets/f903936d-ad06-4185-985a-1d499fac92f3)
+
+### Event Edit
+![Image](https://github.com/user-attachments/assets/44ed1a83-f506-46ba-8561-ffc147f44c9a)
+
+### Sign Up
+![Image](https://github.com/user-attachments/assets/c4d5c388-8c29-4b74-a99f-2901c1e24541)
+
+### Sign Up
+![Image](https://github.com/user-attachments/assets/8f5cee34-52cc-45a4-8ef7-577c29549bca)
