@@ -4,19 +4,6 @@ This is the frontend for Event Buddy, a full-stack event booking platform built 
 
 ---
 
-## Technology Stack
-
-This project leverages a modern, type-safe, and performant technology stack.
-
-- **Framework:** [Next.js](https://nextjs.org/) (v14+ with App Router)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **API Communication:** [Axios](https://axios-http.com/)
-- **State Management:** React Context API (for authentication)
-- **Linting & Formatting:** ESLint & Prettier (included with Next.js)
-
----
-
 ## Getting Started
 
 Follow these instructions to get the frontend development environment set up and running on your local machine.
@@ -121,3 +108,14 @@ This application implements the full feature set required by the project specifi
     - **Read:** View all events in the dashboard and view individual event details on the public page.
     - **Update:** Edit existing event details using the same reusable form.
     - **Delete:** Securely delete events with a confirmation prompt.
+
+## Technology Stack
+
+This project leverages a modern, type-safe, and performant technology stack.
+
+- **Framework:** [Next.js](https://nextjs.org/) (v14+ with App Router)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **API Communication:** [Axios](https://axios-http.com/)
+- **State Management:** React Context API (for authentication)
+- **Linting & Formatting:** ESLint & Prettier (included with Next.js)
