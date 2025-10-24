@@ -4,8 +4,8 @@ This is the frontend for Event Buddy, a full-stack event booking platform built 
 
 The user interface is designed to be modern, responsive, and intuitive, adhering to the designs provided in the Figma specification.
 
-- **Figma Prototype:** [View the Clickable Prototype]([https://www.figma.com/proto/YOUR_PROTOTYPE_LINK](https://www.figma.com/proto/0jVDUmVlyKD1lSeap9rVql/Event-Management?page-id=0%3A1&node-id=1-8980&t=qXZDgd5JzHO3G8mP-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=1%3A8980&show-proto-sidebar=1&hide-ui=1)) <!-- Replace with your Figma link -->
-- **UI Screens:** [View the UI Screens]([https://www.figma.com/file/YOUR_UI_SCREENS_LINK](https://www.figma.com/design/0jVDUmVlyKD1lSeap9rVql/Event-Management?node-id=0-1&p=f&t=U1VZoT97j3HZU66Q-0)) <!-- Replace with your Figma link -->
+- **Figma Prototype:** [View the Clickable Prototype]([https://www.figma.com/proto/YOUR_PROTOTYPE_LINK](https://www.figma.com/proto/0jVDUmVlyKD1lSeap9rVql/Event-Management?page-id=0%3A1&node-id=1-8980&t=qXZDgd5JzHO3G8mP-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=1%3A8980&show-proto-sidebar=1&hide-ui=1) <!-- Replace with your Figma link -->
+- **UI Screens:** [View the UI Screens]([https://www.figma.com/file/YOUR_UI_SCREENS_LINK](https://www.figma.com/design/0jVDUmVlyKD1lSeap9rVql/Event-Management?node-id=0-1&p=f&t=U1VZoT97j3HZU66Q-0) <!-- Replace with your Figma link -->
 
 ---
 
