@@ -49,6 +49,16 @@ To run the full application locally, you will need to set up and run both the ba
     JWT_EXPIRES_IN=1d
     ```
 
+4.1. **Database Setup:**
+    
+    1.  Open **pgAdmin 4**.
+    2.  Connect to your local PostgreSQL server.
+    3.  **Drop** any existing `eventbuddy` database.
+    4.  Right-click on `Databases` -> `Create` -> `Database...`.
+    5.  Enter `eventbuddy` as the Database name and click Save.
+    6.  The application will automatically create the necessary tables when it first starts (`synchronize: true` is enabled for development).
+
+
 5.  **Run the Backend:**
     The server will start, connect to the database, and automatically seed the admin user.
     ```bash
