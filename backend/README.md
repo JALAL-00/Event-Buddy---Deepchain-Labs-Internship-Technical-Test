@@ -67,7 +67,6 @@ npm install
 ### 4. Running the Application
 
 ```bash
-# Development mode with hot-reload
 npm run start:dev
 ```
 The server will start on `http://localhost:3000`. The first time it runs, it will automatically seed the database with an Admin account.
