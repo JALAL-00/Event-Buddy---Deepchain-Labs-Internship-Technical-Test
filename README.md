@@ -111,6 +111,8 @@ _Note: To change the default admin credentials, edit the variables in `backend/s
 ### Regular User Account (Manual Registration)
 To test as a regular user, you must first register a new account.
 
+---- Here is a demo for regiter & login ----
+
 **1. Enter the following details:**
 - **Full Name:** `Jalal Uddin`
 - **Email:** `jalaluddin0046@gmail.com`
